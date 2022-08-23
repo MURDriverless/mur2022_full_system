@@ -131,6 +131,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/gtest/cmake_install.cmake")
+  include("/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/cmake_install.cmake")
 
 endif()
 

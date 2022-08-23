@@ -1,0 +1,8 @@
+prefix=/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/install
+
+Name: mur2022
+Description: Description of mur2022
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
