@@ -1,0 +1,2 @@
+
+-DCATKIN_DEVEL_PREFIX=/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/install -G Unix Makefiles
