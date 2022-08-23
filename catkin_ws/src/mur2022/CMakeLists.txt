@@ -8,6 +8,7 @@ project(mur2022)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  message_generation
   cv_bridge
   geometry_msgs
   image_transport
@@ -19,6 +20,12 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   visualization_msgs
 )
+
+find_package(
+  Eigen3 REQUIRED
+)
+
+find_package(Eigen3 REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -54,11 +61,10 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+  FILES
+  place_holder_msg.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -79,7 +85,12 @@ find_package(catkin REQUIRED COMPONENTS
 #   DEPENDENCIES
 #   geometry_msgs#   nav_msgs#   sensor_msgs#   std_msgs#   visualization_msgs
 # )
-
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+  sensor_msgs
+  geometry_msgs
+)
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
 ################################################
@@ -112,7 +123,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES mur2022
-#  CATKIN_DEPENDS cv_bridge geometry_msgs image_transport nav_msgs opencv2 roscpp rospy sensor_msgs std_msgs tf visualization_msgs
+#  CATKIN_DEPENDS cv_bridge geometry_msgs image_transport nav_msgs roscpp rospy sensor_msgs std_msgs tf visualization_msgs
 #  DEPENDS system_lib
 )
 
@@ -142,6 +153,8 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/mur2022_node.cpp)
 
+add_executable(place_holder_node                   src/place_holder_node.cpp)
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -152,10 +165,14 @@ include_directories(
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
+add_dependencies(place_holder_node                  mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
+
+target_link_libraries(place_holder_node                     ${catkin_LIBRARIES})
 
 #############
 ## Install ##
