@@ -123,8 +123,6 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
- INCLUDE_DIRS include
- LIBRARIES mur2022
  CATKIN_DEPENDS   cv_bridge 
                   geometry_msgs 
                   image_transport  
@@ -137,7 +135,6 @@ catkin_package(
                   visualization_msgs
                   pcl_conversions
                   pcl_ros
- DEPENDS system_lib
 )
 
 ###########
@@ -149,6 +146,7 @@ catkin_package(
 include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
+  ${EIGEN3_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library

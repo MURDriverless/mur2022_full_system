@@ -4,5 +4,5 @@ Name: mur2022
 Description: Description of mur2022
 Version: 0.0.0
 Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib -lmur2022
+Libs: -L${prefix}/lib 
 Requires: cv_bridge geometry_msgs image_transport nav_msgs roscpp rospy sensor_msgs std_msgs tf visualization_msgs pcl_conversions pcl_ros

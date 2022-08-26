@@ -1,8 +1,8 @@
 # generated from catkin/cmake/template/pkg.context.pc.in
 CATKIN_PACKAGE_PREFIX = ""
-PROJECT_PKG_CONFIG_INCLUDE_DIRS = "/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/devel/include;/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/src/mur2022/include".split(';') if "/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/devel/include;/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/src/mur2022/include" != "" else []
+PROJECT_PKG_CONFIG_INCLUDE_DIRS = "/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/devel/include".split(';') if "/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/devel/include" != "" else []
 PROJECT_CATKIN_DEPENDS = "cv_bridge;geometry_msgs;image_transport;nav_msgs;roscpp;rospy;sensor_msgs;std_msgs;tf;visualization_msgs;pcl_conversions;pcl_ros".replace(';', ' ')
-PKG_CONFIG_LIBRARIES_WITH_PREFIX = "-lmur2022".split(';') if "-lmur2022" != "" else []
+PKG_CONFIG_LIBRARIES_WITH_PREFIX = "".split(';') if "" != "" else []
 PROJECT_NAME = "mur2022"
 PROJECT_SPACE_DIR = "/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/devel"
 PROJECT_VERSION = "0.0.0"
