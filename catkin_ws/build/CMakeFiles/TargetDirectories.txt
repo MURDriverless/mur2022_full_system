@@ -36,6 +36,7 @@
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/gtest/googlemock/gtest/CMakeFiles/gtest.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/gtest/googlemock/gtest/CMakeFiles/rebuild_cache.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/list_install_components.dir
+/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/both_image_aquisition_node.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/place_holder_node.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/mur2022_gennodejs.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/mur2022_genlisp.dir

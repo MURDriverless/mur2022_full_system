@@ -285,6 +285,19 @@ gtest/fast:
 .PHONY : gtest/fast
 
 #=============================================================================
+# Target rules for targets named both_image_aquisition_node
+
+# Build rule for target.
+both_image_aquisition_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 both_image_aquisition_node
+.PHONY : both_image_aquisition_node
+
+# fast build rule for target.
+both_image_aquisition_node/fast:
+	$(MAKE) -f mur2022/CMakeFiles/both_image_aquisition_node.dir/build.make mur2022/CMakeFiles/both_image_aquisition_node.dir/build
+.PHONY : both_image_aquisition_node/fast
+
+#=============================================================================
 # Target rules for targets named place_holder_node
 
 # Build rule for target.
@@ -1203,6 +1216,7 @@ help:
 	@echo "... gmock"
 	@echo "... gtest_main"
 	@echo "... gtest"
+	@echo "... both_image_aquisition_node"
 	@echo "... place_holder_node"
 	@echo "... mur2022_gennodejs"
 	@echo "... mur2022_genlisp"

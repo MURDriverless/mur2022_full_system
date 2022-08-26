@@ -168,6 +168,21 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+mur2022/CMakeFiles/both_image_aquisition_node.dir/rule:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 mur2022/CMakeFiles/both_image_aquisition_node.dir/rule
+.PHONY : mur2022/CMakeFiles/both_image_aquisition_node.dir/rule
+
+# Convenience name for target.
+both_image_aquisition_node: mur2022/CMakeFiles/both_image_aquisition_node.dir/rule
+
+.PHONY : both_image_aquisition_node
+
+# fast build rule for target.
+both_image_aquisition_node/fast:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/both_image_aquisition_node.dir/build.make mur2022/CMakeFiles/both_image_aquisition_node.dir/build
+.PHONY : both_image_aquisition_node/fast
+
+# Convenience name for target.
 mur2022/CMakeFiles/place_holder_node.dir/rule:
 	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 mur2022/CMakeFiles/place_holder_node.dir/rule
 .PHONY : mur2022/CMakeFiles/place_holder_node.dir/rule
@@ -1202,6 +1217,33 @@ actionlib_msgs_generate_messages_py/fast:
 	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/actionlib_msgs_generate_messages_py.dir/build.make mur2022/CMakeFiles/actionlib_msgs_generate_messages_py.dir/build
 .PHONY : actionlib_msgs_generate_messages_py/fast
 
+src/both_image_aquisition_node.o: src/both_image_aquisition_node.cpp.o
+
+.PHONY : src/both_image_aquisition_node.o
+
+# target to build an object file
+src/both_image_aquisition_node.cpp.o:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/both_image_aquisition_node.dir/build.make mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.o
+.PHONY : src/both_image_aquisition_node.cpp.o
+
+src/both_image_aquisition_node.i: src/both_image_aquisition_node.cpp.i
+
+.PHONY : src/both_image_aquisition_node.i
+
+# target to preprocess a source file
+src/both_image_aquisition_node.cpp.i:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/both_image_aquisition_node.dir/build.make mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.i
+.PHONY : src/both_image_aquisition_node.cpp.i
+
+src/both_image_aquisition_node.s: src/both_image_aquisition_node.cpp.s
+
+.PHONY : src/both_image_aquisition_node.s
+
+# target to generate assembly for a file
+src/both_image_aquisition_node.cpp.s:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/both_image_aquisition_node.dir/build.make mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.s
+.PHONY : src/both_image_aquisition_node.cpp.s
+
 src/place_holder_node.o: src/place_holder_node.cpp.o
 
 .PHONY : src/place_holder_node.o
@@ -1236,6 +1278,7 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... list_install_components"
+	@echo "... both_image_aquisition_node"
 	@echo "... place_holder_node"
 	@echo "... mur2022_gennodejs"
 	@echo "... mur2022_genlisp"
@@ -1311,6 +1354,9 @@ help:
 	@echo "... mur2022_generate_messages_py"
 	@echo "... actionlib_msgs_generate_messages_lisp"
 	@echo "... actionlib_msgs_generate_messages_py"
+	@echo "... src/both_image_aquisition_node.o"
+	@echo "... src/both_image_aquisition_node.i"
+	@echo "... src/both_image_aquisition_node.s"
 	@echo "... src/place_holder_node.o"
 	@echo "... src/place_holder_node.i"
 	@echo "... src/place_holder_node.s"

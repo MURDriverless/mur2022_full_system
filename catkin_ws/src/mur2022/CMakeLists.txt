@@ -153,7 +153,9 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/mur2022_node.cpp)
 
-add_executable(place_holder_node                   src/place_holder_node.cpp)
+add_executable(place_holder_node                    src/place_holder_node.cpp)
+add_executable(both_image_aquisition_node           src/both_image_aquisition_node.cpp)
+add_executable(husky_control_node                   src/husky_control_node.cpp)        
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -166,13 +168,16 @@ add_executable(place_holder_node                   src/place_holder_node.cpp)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 add_dependencies(place_holder_node                  mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+add_dependencies(both_image_aquisition_node         mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+add_dependencies()
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
 
-target_link_libraries(place_holder_node                     ${catkin_LIBRARIES})
+target_link_libraries(place_holder_node                   ${catkin_LIBRARIES})
+target_link_libraries(both_image_aquisition_node          ${catkin_LIBRARIES})
 
 #############
 ## Install ##
