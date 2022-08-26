@@ -76,3 +76,16 @@ mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node
  /opt/ros/melodic/include/std_msgs/Header.h
  /opt/ros/melodic/include/xmlrpcpp/XmlRpcDecl.h
  /opt/ros/melodic/include/xmlrpcpp/XmlRpcValue.h
+ /usr/include/x86_64-linux-gnu/bits/select.h
+ /usr/include/x86_64-linux-gnu/bits/select2.h
+ /usr/include/x86_64-linux-gnu/bits/types.h
+ /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h
+ /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h
+ /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h
+ /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h
+ /usr/include/x86_64-linux-gnu/bits/types/time_t.h
+ /usr/include/x86_64-linux-gnu/bits/typesizes.h
+ /usr/include/x86_64-linux-gnu/bits/wordsize.h
+ /usr/include/x86_64-linux-gnu/sys/select.h
+ /usr/include/x86_64-linux-gnu/sys/time.h
+ /usr/include/x86_64-linux-gnu/sys/timeb.h

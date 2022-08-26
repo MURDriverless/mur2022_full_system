@@ -116,7 +116,7 @@ if(NOT "include " STREQUAL " ")
   endforeach()
 endif()
 
-set(libraries "")
+set(libraries "mur2022")
 foreach(library ${libraries})
   # keep build configuration keywords, target names and absolute libraries as-is
   if("${library}" MATCHES "^(debug|optimized|general)$")
@@ -185,7 +185,7 @@ foreach(t ${mur2022_EXPORTED_TARGETS})
   endif()
 endforeach()
 
-set(depends "")
+set(depends "cv_bridge;geometry_msgs;image_transport;nav_msgs;roscpp;rospy;sensor_msgs;std_msgs;tf;visualization_msgs;pcl_conversions;pcl_ros")
 foreach(depend ${depends})
   string(REPLACE " " ";" depend_list ${depend})
   # the package name of the dependency must be kept in a unique variable so that it is not overwritten in recursive calls

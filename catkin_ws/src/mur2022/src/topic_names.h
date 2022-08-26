@@ -2,7 +2,7 @@
 #ifndef TOPIC_NAMES
 #define TOPIC_NAMES
 
-#define LEFT_IMAGE_TOPIC "/left_image_raw"
+#define LEFT_IMAGE_TOPIC "/left_image_raw" 
 #define RIGHT_IMAGE_TOPIC "/right_image_raw"
 #define LIDAR_RAW_TOPIC "/lidar_raw"
 #define ODOM_TOPIC "/odometry_filtered"

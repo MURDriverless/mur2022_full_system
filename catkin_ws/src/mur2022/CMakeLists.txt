@@ -19,6 +19,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   tf
   visualization_msgs
+  pcl_conversions
+  pcl_ros
 )
 
 find_package(
@@ -121,10 +123,21 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES mur2022
-#  CATKIN_DEPENDS cv_bridge geometry_msgs image_transport nav_msgs roscpp rospy sensor_msgs std_msgs tf visualization_msgs
-#  DEPENDS system_lib
+ INCLUDE_DIRS include
+ LIBRARIES mur2022
+ CATKIN_DEPENDS   cv_bridge 
+                  geometry_msgs 
+                  image_transport  
+                  nav_msgs 
+                  roscpp 
+                  rospy 
+                  sensor_msgs 
+                  std_msgs 
+                  tf 
+                  visualization_msgs
+                  pcl_conversions
+                  pcl_ros
+ DEPENDS system_lib
 )
 
 ###########
@@ -154,8 +167,11 @@ include_directories(
 # add_executable(${PROJECT_NAME}_node src/mur2022_node.cpp)
 
 add_executable(place_holder_node                    src/place_holder_node.cpp)
-add_executable(both_image_aquisition_node           src/both_image_aquisition_node.cpp)
-add_executable(husky_control_node                   src/husky_control_node.cpp)        
+add_executable(both_image_aquisition_node           src/both_image_aquisition_node.cpp)        
+add_executable(cone_location_node                   src/cone_location_node.cpp)
+add_executable(husky_control_node                   src/husky_control_node.cpp)
+add_executable(husky_mpcc_node                      src/husky_mpcc_node.cpp)
+add_executable(lego_loam_node                       src/lego_loam_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -169,7 +185,10 @@ add_executable(husky_control_node                   src/husky_control_node.cpp)
 
 add_dependencies(place_holder_node                  mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 add_dependencies(both_image_aquisition_node         mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
-add_dependencies()
+add_dependencies(cone_location_node                 mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+add_dependencies(husky_control_node                 mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+add_dependencies(husky_mpcc_node                    mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})     
+add_dependencies(lego_loam_node                     mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})     
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
@@ -178,6 +197,10 @@ add_dependencies()
 
 target_link_libraries(place_holder_node                   ${catkin_LIBRARIES})
 target_link_libraries(both_image_aquisition_node          ${catkin_LIBRARIES})
+target_link_libraries(cone_location_node                  ${catkin_LIBRARIES})
+target_link_libraries(husky_control_node                  ${catkin_LIBRARIES})
+target_link_libraries(husky_mpcc_node                     ${catkin_LIBRARIES})
+target_link_libraries(lego_loam_node                      ${catkin_LIBRARIES})       
 
 #############
 ## Install ##

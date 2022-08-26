@@ -75,4 +75,17 @@ mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node
 mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.o: /opt/ros/melodic/include/std_msgs/Header.h
 mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.o: /opt/ros/melodic/include/xmlrpcpp/XmlRpcDecl.h
 mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.o: /opt/ros/melodic/include/xmlrpcpp/XmlRpcValue.h
+mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.o: /usr/include/x86_64-linux-gnu/bits/select.h
+mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.o: /usr/include/x86_64-linux-gnu/bits/select2.h
+mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.o: /usr/include/x86_64-linux-gnu/bits/types.h
+mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.o: /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h
+mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.o: /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h
+mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.o: /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h
+mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.o: /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h
+mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.o: /usr/include/x86_64-linux-gnu/bits/types/time_t.h
+mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.o: /usr/include/x86_64-linux-gnu/bits/typesizes.h
+mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.o: /usr/include/x86_64-linux-gnu/bits/wordsize.h
+mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.o: /usr/include/x86_64-linux-gnu/sys/select.h
+mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.o: /usr/include/x86_64-linux-gnu/sys/time.h
+mur2022/CMakeFiles/both_image_aquisition_node.dir/src/both_image_aquisition_node.cpp.o: /usr/include/x86_64-linux-gnu/sys/timeb.h
 

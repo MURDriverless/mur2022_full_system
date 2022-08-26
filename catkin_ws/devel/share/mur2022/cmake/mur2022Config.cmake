@@ -91,9 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(mur2022_FOUND_CATKIN_PROJECT TRUE)
 
-if(NOT "/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/devel/include " STREQUAL " ")
+if(NOT "/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/devel/include;/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/src/mur2022/include " STREQUAL " ")
   set(mur2022_INCLUDE_DIRS "")
-  set(_include_dirs "/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/devel/include")
+  set(_include_dirs "/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/devel/include;/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/src/mur2022/include")
   if(NOT " " STREQUAL " ")
     set(_report "Check the issue tracker '' and consider creating a ticket if the problem has not been reported yet.")
   elseif(NOT " " STREQUAL " ")
@@ -116,7 +116,7 @@ if(NOT "/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/devel/include " S
   endforeach()
 endif()
 
-set(libraries "")
+set(libraries "mur2022")
 foreach(library ${libraries})
   # keep build configuration keywords, target names and absolute libraries as-is
   if("${library}" MATCHES "^(debug|optimized|general)$")
@@ -185,7 +185,7 @@ foreach(t ${mur2022_EXPORTED_TARGETS})
   endif()
 endforeach()
 
-set(depends "")
+set(depends "cv_bridge;geometry_msgs;image_transport;nav_msgs;roscpp;rospy;sensor_msgs;std_msgs;tf;visualization_msgs;pcl_conversions;pcl_ros")
 foreach(depend ${depends})
   string(REPLACE " " ";" depend_list ${depend})
   # the package name of the dependency must be kept in a unique variable so that it is not overwritten in recursive calls
