@@ -35,10 +35,12 @@
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/gtest/googlemock/gtest/CMakeFiles/list_install_components.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/gtest/googlemock/gtest/CMakeFiles/gtest.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/gtest/googlemock/gtest/CMakeFiles/rebuild_cache.dir
-/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/install/strip.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/install/local.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/install.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/list_install_components.dir
+/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/mur_stereo_ros_node.dir
+/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/install/strip.dir
+/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/lidar_reader_node.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/husky_control_node.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/husky_mpcc_node.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/cone_location_node.dir
@@ -52,6 +54,7 @@
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/mur2022_geneus.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/_mur2022_generate_messages_check_deps_place_holder_msg.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/topic_tools_generate_messages_nodejs.dir
+/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/follower_node.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/topic_tools_generate_messages_lisp.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/topic_tools_generate_messages_eus.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/topic_tools_generate_messages_cpp.dir
@@ -120,7 +123,9 @@
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/actionlib_generate_messages_lisp.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/nodelet_generate_messages_cpp.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/bond_generate_messages_py.dir
+/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/planner_node.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/pcl_ros_gencfg.dir
+/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/output_transformation_node.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/tf2_msgs_generate_messages_cpp.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/actionlib_generate_messages_py.dir
 /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build/mur2022/CMakeFiles/tf2_msgs_generate_messages_py.dir

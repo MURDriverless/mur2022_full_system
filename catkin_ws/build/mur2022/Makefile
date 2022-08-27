@@ -56,18 +56,6 @@ CMAKE_BINARY_DIR = /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target install/strip
-install/strip: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip
-
-# Special rule for the target install/strip
-install/strip/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip/fast
-
 # Special rule for the target install/local
 install/local: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
@@ -101,6 +89,18 @@ list_install_components:
 list_install_components/fast: list_install_components
 
 .PHONY : list_install_components/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
 
 # Special rule for the target rebuild_cache
 rebuild_cache:
@@ -166,6 +166,36 @@ preinstall/fast:
 depend:
 	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
+
+# Convenience name for target.
+mur2022/CMakeFiles/mur_stereo_ros_node.dir/rule:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 mur2022/CMakeFiles/mur_stereo_ros_node.dir/rule
+.PHONY : mur2022/CMakeFiles/mur_stereo_ros_node.dir/rule
+
+# Convenience name for target.
+mur_stereo_ros_node: mur2022/CMakeFiles/mur_stereo_ros_node.dir/rule
+
+.PHONY : mur_stereo_ros_node
+
+# fast build rule for target.
+mur_stereo_ros_node/fast:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/mur_stereo_ros_node.dir/build.make mur2022/CMakeFiles/mur_stereo_ros_node.dir/build
+.PHONY : mur_stereo_ros_node/fast
+
+# Convenience name for target.
+mur2022/CMakeFiles/lidar_reader_node.dir/rule:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 mur2022/CMakeFiles/lidar_reader_node.dir/rule
+.PHONY : mur2022/CMakeFiles/lidar_reader_node.dir/rule
+
+# Convenience name for target.
+lidar_reader_node: mur2022/CMakeFiles/lidar_reader_node.dir/rule
+
+.PHONY : lidar_reader_node
+
+# fast build rule for target.
+lidar_reader_node/fast:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/lidar_reader_node.dir/build.make mur2022/CMakeFiles/lidar_reader_node.dir/build
+.PHONY : lidar_reader_node/fast
 
 # Convenience name for target.
 mur2022/CMakeFiles/husky_control_node.dir/rule:
@@ -361,6 +391,21 @@ topic_tools_generate_messages_nodejs: mur2022/CMakeFiles/topic_tools_generate_me
 topic_tools_generate_messages_nodejs/fast:
 	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/topic_tools_generate_messages_nodejs.dir/build.make mur2022/CMakeFiles/topic_tools_generate_messages_nodejs.dir/build
 .PHONY : topic_tools_generate_messages_nodejs/fast
+
+# Convenience name for target.
+mur2022/CMakeFiles/follower_node.dir/rule:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 mur2022/CMakeFiles/follower_node.dir/rule
+.PHONY : mur2022/CMakeFiles/follower_node.dir/rule
+
+# Convenience name for target.
+follower_node: mur2022/CMakeFiles/follower_node.dir/rule
+
+.PHONY : follower_node
+
+# fast build rule for target.
+follower_node/fast:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/follower_node.dir/build.make mur2022/CMakeFiles/follower_node.dir/build
+.PHONY : follower_node/fast
 
 # Convenience name for target.
 mur2022/CMakeFiles/topic_tools_generate_messages_lisp.dir/rule:
@@ -1338,6 +1383,21 @@ bond_generate_messages_py/fast:
 .PHONY : bond_generate_messages_py/fast
 
 # Convenience name for target.
+mur2022/CMakeFiles/planner_node.dir/rule:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 mur2022/CMakeFiles/planner_node.dir/rule
+.PHONY : mur2022/CMakeFiles/planner_node.dir/rule
+
+# Convenience name for target.
+planner_node: mur2022/CMakeFiles/planner_node.dir/rule
+
+.PHONY : planner_node
+
+# fast build rule for target.
+planner_node/fast:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/planner_node.dir/build.make mur2022/CMakeFiles/planner_node.dir/build
+.PHONY : planner_node/fast
+
+# Convenience name for target.
 mur2022/CMakeFiles/pcl_ros_gencfg.dir/rule:
 	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 mur2022/CMakeFiles/pcl_ros_gencfg.dir/rule
 .PHONY : mur2022/CMakeFiles/pcl_ros_gencfg.dir/rule
@@ -1351,6 +1411,21 @@ pcl_ros_gencfg: mur2022/CMakeFiles/pcl_ros_gencfg.dir/rule
 pcl_ros_gencfg/fast:
 	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/pcl_ros_gencfg.dir/build.make mur2022/CMakeFiles/pcl_ros_gencfg.dir/build
 .PHONY : pcl_ros_gencfg/fast
+
+# Convenience name for target.
+mur2022/CMakeFiles/output_transformation_node.dir/rule:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 mur2022/CMakeFiles/output_transformation_node.dir/rule
+.PHONY : mur2022/CMakeFiles/output_transformation_node.dir/rule
+
+# Convenience name for target.
+output_transformation_node: mur2022/CMakeFiles/output_transformation_node.dir/rule
+
+.PHONY : output_transformation_node
+
+# fast build rule for target.
+output_transformation_node/fast:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/output_transformation_node.dir/build.make mur2022/CMakeFiles/output_transformation_node.dir/build
+.PHONY : output_transformation_node/fast
 
 # Convenience name for target.
 mur2022/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/rule:
@@ -1826,6 +1901,33 @@ src/cone_location_node.cpp.s:
 	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/cone_location_node.dir/build.make mur2022/CMakeFiles/cone_location_node.dir/src/cone_location_node.cpp.s
 .PHONY : src/cone_location_node.cpp.s
 
+src/follower_node.o: src/follower_node.cpp.o
+
+.PHONY : src/follower_node.o
+
+# target to build an object file
+src/follower_node.cpp.o:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/follower_node.dir/build.make mur2022/CMakeFiles/follower_node.dir/src/follower_node.cpp.o
+.PHONY : src/follower_node.cpp.o
+
+src/follower_node.i: src/follower_node.cpp.i
+
+.PHONY : src/follower_node.i
+
+# target to preprocess a source file
+src/follower_node.cpp.i:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/follower_node.dir/build.make mur2022/CMakeFiles/follower_node.dir/src/follower_node.cpp.i
+.PHONY : src/follower_node.cpp.i
+
+src/follower_node.s: src/follower_node.cpp.s
+
+.PHONY : src/follower_node.s
+
+# target to generate assembly for a file
+src/follower_node.cpp.s:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/follower_node.dir/build.make mur2022/CMakeFiles/follower_node.dir/src/follower_node.cpp.s
+.PHONY : src/follower_node.cpp.s
+
 src/husky_control_node.o: src/husky_control_node.cpp.o
 
 .PHONY : src/husky_control_node.o
@@ -1907,6 +2009,87 @@ src/lego_loam_node.cpp.s:
 	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/lego_loam_node.dir/build.make mur2022/CMakeFiles/lego_loam_node.dir/src/lego_loam_node.cpp.s
 .PHONY : src/lego_loam_node.cpp.s
 
+src/lidar_reader_node.o: src/lidar_reader_node.cpp.o
+
+.PHONY : src/lidar_reader_node.o
+
+# target to build an object file
+src/lidar_reader_node.cpp.o:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/lidar_reader_node.dir/build.make mur2022/CMakeFiles/lidar_reader_node.dir/src/lidar_reader_node.cpp.o
+.PHONY : src/lidar_reader_node.cpp.o
+
+src/lidar_reader_node.i: src/lidar_reader_node.cpp.i
+
+.PHONY : src/lidar_reader_node.i
+
+# target to preprocess a source file
+src/lidar_reader_node.cpp.i:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/lidar_reader_node.dir/build.make mur2022/CMakeFiles/lidar_reader_node.dir/src/lidar_reader_node.cpp.i
+.PHONY : src/lidar_reader_node.cpp.i
+
+src/lidar_reader_node.s: src/lidar_reader_node.cpp.s
+
+.PHONY : src/lidar_reader_node.s
+
+# target to generate assembly for a file
+src/lidar_reader_node.cpp.s:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/lidar_reader_node.dir/build.make mur2022/CMakeFiles/lidar_reader_node.dir/src/lidar_reader_node.cpp.s
+.PHONY : src/lidar_reader_node.cpp.s
+
+src/mur_stereo_ros_node.o: src/mur_stereo_ros_node.cpp.o
+
+.PHONY : src/mur_stereo_ros_node.o
+
+# target to build an object file
+src/mur_stereo_ros_node.cpp.o:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/mur_stereo_ros_node.dir/build.make mur2022/CMakeFiles/mur_stereo_ros_node.dir/src/mur_stereo_ros_node.cpp.o
+.PHONY : src/mur_stereo_ros_node.cpp.o
+
+src/mur_stereo_ros_node.i: src/mur_stereo_ros_node.cpp.i
+
+.PHONY : src/mur_stereo_ros_node.i
+
+# target to preprocess a source file
+src/mur_stereo_ros_node.cpp.i:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/mur_stereo_ros_node.dir/build.make mur2022/CMakeFiles/mur_stereo_ros_node.dir/src/mur_stereo_ros_node.cpp.i
+.PHONY : src/mur_stereo_ros_node.cpp.i
+
+src/mur_stereo_ros_node.s: src/mur_stereo_ros_node.cpp.s
+
+.PHONY : src/mur_stereo_ros_node.s
+
+# target to generate assembly for a file
+src/mur_stereo_ros_node.cpp.s:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/mur_stereo_ros_node.dir/build.make mur2022/CMakeFiles/mur_stereo_ros_node.dir/src/mur_stereo_ros_node.cpp.s
+.PHONY : src/mur_stereo_ros_node.cpp.s
+
+src/output_transformation_node.o: src/output_transformation_node.cpp.o
+
+.PHONY : src/output_transformation_node.o
+
+# target to build an object file
+src/output_transformation_node.cpp.o:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/output_transformation_node.dir/build.make mur2022/CMakeFiles/output_transformation_node.dir/src/output_transformation_node.cpp.o
+.PHONY : src/output_transformation_node.cpp.o
+
+src/output_transformation_node.i: src/output_transformation_node.cpp.i
+
+.PHONY : src/output_transformation_node.i
+
+# target to preprocess a source file
+src/output_transformation_node.cpp.i:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/output_transformation_node.dir/build.make mur2022/CMakeFiles/output_transformation_node.dir/src/output_transformation_node.cpp.i
+.PHONY : src/output_transformation_node.cpp.i
+
+src/output_transformation_node.s: src/output_transformation_node.cpp.s
+
+.PHONY : src/output_transformation_node.s
+
+# target to generate assembly for a file
+src/output_transformation_node.cpp.s:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/output_transformation_node.dir/build.make mur2022/CMakeFiles/output_transformation_node.dir/src/output_transformation_node.cpp.s
+.PHONY : src/output_transformation_node.cpp.s
+
 src/place_holder_node.o: src/place_holder_node.cpp.o
 
 .PHONY : src/place_holder_node.o
@@ -1934,16 +2117,45 @@ src/place_holder_node.cpp.s:
 	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/place_holder_node.dir/build.make mur2022/CMakeFiles/place_holder_node.dir/src/place_holder_node.cpp.s
 .PHONY : src/place_holder_node.cpp.s
 
+src/planner_node.o: src/planner_node.cpp.o
+
+.PHONY : src/planner_node.o
+
+# target to build an object file
+src/planner_node.cpp.o:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/planner_node.dir/build.make mur2022/CMakeFiles/planner_node.dir/src/planner_node.cpp.o
+.PHONY : src/planner_node.cpp.o
+
+src/planner_node.i: src/planner_node.cpp.i
+
+.PHONY : src/planner_node.i
+
+# target to preprocess a source file
+src/planner_node.cpp.i:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/planner_node.dir/build.make mur2022/CMakeFiles/planner_node.dir/src/planner_node.cpp.i
+.PHONY : src/planner_node.cpp.i
+
+src/planner_node.s: src/planner_node.cpp.s
+
+.PHONY : src/planner_node.s
+
+# target to generate assembly for a file
+src/planner_node.cpp.s:
+	cd /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/build && $(MAKE) -f mur2022/CMakeFiles/planner_node.dir/build.make mur2022/CMakeFiles/planner_node.dir/src/planner_node.cpp.s
+.PHONY : src/planner_node.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... install/strip"
 	@echo "... install/local"
 	@echo "... install"
 	@echo "... list_install_components"
+	@echo "... mur_stereo_ros_node"
+	@echo "... install/strip"
+	@echo "... lidar_reader_node"
 	@echo "... husky_control_node"
 	@echo "... husky_mpcc_node"
 	@echo "... cone_location_node"
@@ -1957,6 +2169,7 @@ help:
 	@echo "... mur2022_geneus"
 	@echo "... _mur2022_generate_messages_check_deps_place_holder_msg"
 	@echo "... topic_tools_generate_messages_nodejs"
+	@echo "... follower_node"
 	@echo "... topic_tools_generate_messages_lisp"
 	@echo "... topic_tools_generate_messages_eus"
 	@echo "... topic_tools_generate_messages_cpp"
@@ -2025,7 +2238,9 @@ help:
 	@echo "... actionlib_generate_messages_lisp"
 	@echo "... nodelet_generate_messages_cpp"
 	@echo "... bond_generate_messages_py"
+	@echo "... planner_node"
 	@echo "... pcl_ros_gencfg"
+	@echo "... output_transformation_node"
 	@echo "... tf2_msgs_generate_messages_cpp"
 	@echo "... actionlib_generate_messages_py"
 	@echo "... tf2_msgs_generate_messages_py"
@@ -2060,6 +2275,9 @@ help:
 	@echo "... src/cone_location_node.o"
 	@echo "... src/cone_location_node.i"
 	@echo "... src/cone_location_node.s"
+	@echo "... src/follower_node.o"
+	@echo "... src/follower_node.i"
+	@echo "... src/follower_node.s"
 	@echo "... src/husky_control_node.o"
 	@echo "... src/husky_control_node.i"
 	@echo "... src/husky_control_node.s"
@@ -2069,9 +2287,21 @@ help:
 	@echo "... src/lego_loam_node.o"
 	@echo "... src/lego_loam_node.i"
 	@echo "... src/lego_loam_node.s"
+	@echo "... src/lidar_reader_node.o"
+	@echo "... src/lidar_reader_node.i"
+	@echo "... src/lidar_reader_node.s"
+	@echo "... src/mur_stereo_ros_node.o"
+	@echo "... src/mur_stereo_ros_node.i"
+	@echo "... src/mur_stereo_ros_node.s"
+	@echo "... src/output_transformation_node.o"
+	@echo "... src/output_transformation_node.i"
+	@echo "... src/output_transformation_node.s"
 	@echo "... src/place_holder_node.o"
 	@echo "... src/place_holder_node.i"
 	@echo "... src/place_holder_node.s"
+	@echo "... src/planner_node.o"
+	@echo "... src/planner_node.i"
+	@echo "... src/planner_node.s"
 .PHONY : help
 
 

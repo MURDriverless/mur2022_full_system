@@ -285,6 +285,32 @@ gtest/fast:
 .PHONY : gtest/fast
 
 #=============================================================================
+# Target rules for targets named mur_stereo_ros_node
+
+# Build rule for target.
+mur_stereo_ros_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 mur_stereo_ros_node
+.PHONY : mur_stereo_ros_node
+
+# fast build rule for target.
+mur_stereo_ros_node/fast:
+	$(MAKE) -f mur2022/CMakeFiles/mur_stereo_ros_node.dir/build.make mur2022/CMakeFiles/mur_stereo_ros_node.dir/build
+.PHONY : mur_stereo_ros_node/fast
+
+#=============================================================================
+# Target rules for targets named lidar_reader_node
+
+# Build rule for target.
+lidar_reader_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 lidar_reader_node
+.PHONY : lidar_reader_node
+
+# fast build rule for target.
+lidar_reader_node/fast:
+	$(MAKE) -f mur2022/CMakeFiles/lidar_reader_node.dir/build.make mur2022/CMakeFiles/lidar_reader_node.dir/build
+.PHONY : lidar_reader_node/fast
+
+#=============================================================================
 # Target rules for targets named husky_control_node
 
 # Build rule for target.
@@ -452,6 +478,19 @@ topic_tools_generate_messages_nodejs: cmake_check_build_system
 topic_tools_generate_messages_nodejs/fast:
 	$(MAKE) -f mur2022/CMakeFiles/topic_tools_generate_messages_nodejs.dir/build.make mur2022/CMakeFiles/topic_tools_generate_messages_nodejs.dir/build
 .PHONY : topic_tools_generate_messages_nodejs/fast
+
+#=============================================================================
+# Target rules for targets named follower_node
+
+# Build rule for target.
+follower_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 follower_node
+.PHONY : follower_node
+
+# fast build rule for target.
+follower_node/fast:
+	$(MAKE) -f mur2022/CMakeFiles/follower_node.dir/build.make mur2022/CMakeFiles/follower_node.dir/build
+.PHONY : follower_node/fast
 
 #=============================================================================
 # Target rules for targets named topic_tools_generate_messages_lisp
@@ -1299,6 +1338,19 @@ bond_generate_messages_py/fast:
 .PHONY : bond_generate_messages_py/fast
 
 #=============================================================================
+# Target rules for targets named planner_node
+
+# Build rule for target.
+planner_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 planner_node
+.PHONY : planner_node
+
+# fast build rule for target.
+planner_node/fast:
+	$(MAKE) -f mur2022/CMakeFiles/planner_node.dir/build.make mur2022/CMakeFiles/planner_node.dir/build
+.PHONY : planner_node/fast
+
+#=============================================================================
 # Target rules for targets named pcl_ros_gencfg
 
 # Build rule for target.
@@ -1310,6 +1362,19 @@ pcl_ros_gencfg: cmake_check_build_system
 pcl_ros_gencfg/fast:
 	$(MAKE) -f mur2022/CMakeFiles/pcl_ros_gencfg.dir/build.make mur2022/CMakeFiles/pcl_ros_gencfg.dir/build
 .PHONY : pcl_ros_gencfg/fast
+
+#=============================================================================
+# Target rules for targets named output_transformation_node
+
+# Build rule for target.
+output_transformation_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 output_transformation_node
+.PHONY : output_transformation_node
+
+# fast build rule for target.
+output_transformation_node/fast:
+	$(MAKE) -f mur2022/CMakeFiles/output_transformation_node.dir/build.make mur2022/CMakeFiles/output_transformation_node.dir/build
+.PHONY : output_transformation_node/fast
 
 #=============================================================================
 # Target rules for targets named tf2_msgs_generate_messages_cpp
@@ -1697,6 +1762,8 @@ help:
 	@echo "... gmock"
 	@echo "... gtest_main"
 	@echo "... gtest"
+	@echo "... mur_stereo_ros_node"
+	@echo "... lidar_reader_node"
 	@echo "... husky_control_node"
 	@echo "... husky_mpcc_node"
 	@echo "... cone_location_node"
@@ -1710,6 +1777,7 @@ help:
 	@echo "... mur2022_geneus"
 	@echo "... _mur2022_generate_messages_check_deps_place_holder_msg"
 	@echo "... topic_tools_generate_messages_nodejs"
+	@echo "... follower_node"
 	@echo "... topic_tools_generate_messages_lisp"
 	@echo "... topic_tools_generate_messages_eus"
 	@echo "... topic_tools_generate_messages_cpp"
@@ -1775,7 +1843,9 @@ help:
 	@echo "... actionlib_generate_messages_lisp"
 	@echo "... nodelet_generate_messages_cpp"
 	@echo "... bond_generate_messages_py"
+	@echo "... planner_node"
 	@echo "... pcl_ros_gencfg"
+	@echo "... output_transformation_node"
 	@echo "... tf2_msgs_generate_messages_cpp"
 	@echo "... actionlib_generate_messages_py"
 	@echo "... tf2_msgs_generate_messages_py"
