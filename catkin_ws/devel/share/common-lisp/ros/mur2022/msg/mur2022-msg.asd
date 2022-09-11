@@ -1,1 +1,0 @@
-/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/devel/.private/mur2022/share/common-lisp/ros/mur2022/msg/mur2022-msg.asd
