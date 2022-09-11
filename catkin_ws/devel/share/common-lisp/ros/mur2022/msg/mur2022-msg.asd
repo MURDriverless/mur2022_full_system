@@ -1,9 +1,1 @@
-
-(cl:in-package :asdf)
-
-(defsystem "mur2022-msg"
-  :depends-on (:roslisp-msg-protocol :roslisp-utils )
-  :components ((:file "_package")
-    (:file "place_holder_msg" :depends-on ("_package_place_holder_msg"))
-    (:file "_package_place_holder_msg" :depends-on ("_package"))
-  ))
+/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/devel/.private/mur2022/share/common-lisp/ros/mur2022/msg/mur2022-msg.asd
