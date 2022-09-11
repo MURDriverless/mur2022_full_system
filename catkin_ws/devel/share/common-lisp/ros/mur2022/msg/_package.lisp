@@ -1,7 +1,1 @@
-(cl:defpackage mur2022-msg
-  (:use )
-  (:export
-   "<PLACE_HOLDER_MSG>"
-   "PLACE_HOLDER_MSG"
-  ))
-
+/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/devel/.private/mur2022/share/common-lisp/ros/mur2022/msg/_package.lisp
