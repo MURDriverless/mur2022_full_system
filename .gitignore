@@ -7,10 +7,6 @@ srv_gen/
 build_isolated/
 devel_isolated/
 
-# Catkin custom files
-CATKIN_IGNORE
-
-
 # CMake
 cmake-build-*/
 
@@ -27,7 +23,7 @@ catkin_ws/logs/
 
 # Ignore the ".catkin_workshop" file of the catkin_ws
 catkin_ws/.catkin_workspace
-catkin_ws/.catkin_tools
+catkin_ws/.catkin_tools/
 
 # Ignore the auto-generated "CMakeLists.txt" of the catkin_ws
 catkin_ws/src/CMakeLists.txt
