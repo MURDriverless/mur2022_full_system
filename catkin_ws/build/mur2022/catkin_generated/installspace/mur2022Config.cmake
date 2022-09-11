@@ -68,7 +68,7 @@ set(mur2022_CONFIG_INCLUDED TRUE)
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
   set(mur2022_SOURCE_PREFIX /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/src/mur2022)
-  set(mur2022_DEVEL_PREFIX /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/devel)
+  set(mur2022_DEVEL_PREFIX /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/devel/.private/mur2022)
   set(mur2022_INSTALL_PREFIX "")
   set(mur2022_PREFIX ${mur2022_DEVEL_PREFIX})
 else()
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/install/lib;/opt/ros/melodic/lib)
+    foreach(path /home/bill/Documents/MUR/mur2022_full_system/catkin_ws/install/lib;/home/bill/Documents/MUR/mur2022_full_system/catkin_ws/devel/lib;/opt/ros/melodic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
