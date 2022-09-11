@@ -1,9 +1,18 @@
-.catkin_tools/
-build/
 devel/
 logs/
-/*.catkin_workspace
-catkin_ws/build/
-catkin_ws/devel/
-catkin_ws/logs/
-build
+build/
+bin/
+msg_gen/
+srv_gen/
+build_isolated/
+devel_isolated/
+
+# Catkin custom files
+CATKIN_IGNORE
+
+
+# CMake
+cmake-build-*/
+
+# Visual Studio Code
+.vscode/
