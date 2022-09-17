@@ -4,6 +4,10 @@
 #include "std_msgs/Bool.h"
 #include "sensor_msgs/PointCloud2.h"
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <vector>
+
 #include "topic_names.h"
 
 // Declare "member" variables
@@ -12,6 +16,8 @@ ros::Publisher point_cloud_requester_pub;
 ros::Subscriber cones_found_sub;
 ros::Subscriber point_cloud_requested_sub;
 
+std::vector<float>left_cones;
+std::vector<float>right_cones;
 
 void foundCones(const std_msgs::Bool& msg) {}
 
