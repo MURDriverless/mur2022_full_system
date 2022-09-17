@@ -1,0 +1,6 @@
+[submodule "catkin_ws/src/catkin_ws/src/HuskyControl"]
+	path = catkin_ws/src/catkin_ws/src/HuskyControl
+	url = https://github.com/MURDriverless/HuskyControl
+[submodule "catkin_ws/src/HuskyControl"]
+	path = catkin_ws/src/HuskyControl
+	url = https://github.com/MURDriverless/HuskyControl
