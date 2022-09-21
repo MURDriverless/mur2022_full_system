@@ -5,6 +5,7 @@
 #include "sensor_msgs/PointCloud2.h"
 #include "std_msgs/Bool.h"
 #include "geometry_msgs/Point.h"
+#include "tf/transform_listener.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,80 +13,33 @@
 #include <vector>
 
 #include "topic_names.h"
+// #include "mur_common/cone_msg.h" 
+
+#define CONES_DIST_THRESHOLD 1.5
 
 // Declare "member" variables
 ros::Publisher full_cone_pub;
-ros::Publisher point_cloud_requester_pub;
 ros::Subscriber cones_found_sub;
-ros::Subscriber point_cloud_requested_sub;
+// ros::Subscriber pose_sub;
+
+tf::TransformListener tf_listener;
 
 std::vector<float> cones_x;
 std::vector<float> cones_y;
 std::vector<std::string> color;
 
-typedef struct __point__ {
-  float x;
-  float y;
-  float z;
-} point_t;
-
-typedef struct __ori__ {
-  float x;
-  float y;
-  float z;
-  float w;
-} ori_t;
-
-typedef struct __pose__ {
-  point_t point;
-  ori_t ori;
-} pose_t;
-
-pose_t current_pose;
-
 // Checks if the new cone has already been found
 static bool needToAdd(float x, float y);
 
-// Initialises the global varilabes
-static void initialiseGlobalVarliables(void);
 
 // Uses current pose and measured position to get the global cone location
-static point_t getConeGlobalPosition(float x, float y, float z);
+static geometry_msgs::Point getConeGlobalPosition(geometry_msgs::PointStamped local_point);
 
 // Publish vectors of cones
 static void publishCones(void);
 
-void foundCones(const geometry_msgs::Point& msg) {
-	float x, y, z;
-	x = msg.x;
-	y = msg.y;
-	x = msg.z;
-
-	if(needToAdd(x, y)) {
-		point_t global_point = getConeGlobalPosition(x, y, z);
-		cones_x.push_back(global_point.x);
-		cones_y.push_back(global_point.y);
-		
-		// NEED TO CHANGE THIS
-		color.push_back("blue");
-		publishCones();
-	} else {
-		std::cout << "Cone found at: (" << x << ", " << y << ") too close to another cone.";
-	}
-}
-
-void gotCloudBack(const sensor_msgs::PointCloud2& cloud) {}
-
-void gotCurrentPose(const nav_msgs::Odometry& msg) {
-  current_pose.point.x = msg.pose.pose.position.x;
-  current_pose.point.y = msg.pose.pose.position.y;
-  current_pose.point.x = msg.pose.pose.position.z;
-
-  current_pose.ori.x = msg.pose.pose.orientation.x;
-  current_pose.ori.y = msg.pose.pose.orientation.y;
-  current_pose.ori.z = msg.pose.pose.orientation.z;
-  current_pose.ori.w = msg.pose.pose.orientation.w;
-}
+// Callback for new cones found location;
+void foundCones(const geometry_msgs::Point& msg);
 
 int main(int argc, char* argv[]) {
   // Initialise the node
@@ -93,31 +47,75 @@ int main(int argc, char* argv[]) {
   ros::NodeHandle nh("~");
 
   full_cone_pub = nh.advertise<std_msgs::Bool>(CONES_FULL_TOPIC, 1, false);
-  point_cloud_requester_pub =
-      nh.advertise<std_msgs::Bool>(POINT_CLOUD_SECTION_REQUEST_TOPIC, 1);
 
   cones_found_sub = nh.subscribe(CONE_DETECTED_TOPIC, 1, foundCones);
-  point_cloud_requested_sub =
-      nh.subscribe(POINT_CLOUD_SECTION_TOPIC, 1, gotCloudBack);
-
-  initialiseGlobalVarliables();
 
   ros::spin();
 
   return 0;
 }
 
-static void initialiseGlobalVarliables(void) {
-  current_pose.point.x = 0;
-  current_pose.point.y = 0;
-  current_pose.point.z = 0;
+void foundCones(const geometry_msgs::Point& msg) {
+  
+  /** This will be what is needed when the mur_common file is used. 
+  geometry_msgs::PointStamped stamped_point = msg.point;   
+  */
+  geometry_msgs::PointStamped stamped_point;
 
-  current_pose.ori.x = 0;
-  current_pose.ori.y = 0;
-  current_pose.ori.z = 0;
-  current_pose.ori.w = 0;
+  stamped_point.header.frame_id = "/camera";
+  stamped_point.header.stamp = ros::Time::now();
+  stamped_point.point = msg;
+  
+  geometry_msgs::Point global_point = getConeGlobalPosition(stamped_point);
+	
+  if(needToAdd(global_point.x, global_point.y)) {		
+		cones_x.push_back(global_point.x);
+		cones_y.push_back(global_point.y);
+		
+		// NEED TO CHANGE THIS
+    // colour.push_back(msg.colour);
+		color.push_back("blue");
+		publishCones();
+	} else {
+		std::cout << "Cone found at: (" << global_point.x << ", " << global_point.y << ") too close to another cone.";
+	}
 }
 
-static point_t getConeGlobalPosition(float x, float y, float z) {}
+static geometry_msgs::Point getConeGlobalPosition(geometry_msgs::PointStamped local_point) {
+  
+  geometry_msgs::PointStamped global_point;
 
-static bool needToAdd(float x, float y);
+  tf_listener.transformPoint("/camera_init", local_point, global_point);
+
+  return global_point.point;
+}
+
+static bool needToAdd(float x, float y) {
+  for(int i = 0; i < cones_x.size(); i++) {
+    float dist = sqrt(pow(x - cones_x[i], 2) + pow(y - cones_y[i], 2));
+    if (dist < CONES_DIST_THRESHOLD) {
+      return false;
+    }
+  }
+  return true;
+}
+
+static void publishCones(void) {
+  std::cout<<"Bill hasn't fixed this yet. Tell him to!"<<std::endl;
+
+  /**
+  ros::Time current_time = ros::Time::now();
+  
+  mur_common::cone_msg cones;
+  cones.header.frame_id = "/camera_init";
+  cones.header.stamp = current_time;
+  
+  cones.x = cones_x;
+  cones.y = cones_y;
+  cones.colour = color;
+  
+  cones.frame_id = "/camera_init"
+  
+  pub_cones.publish(cones);   
+  */
+}
