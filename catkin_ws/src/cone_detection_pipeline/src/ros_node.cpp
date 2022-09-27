@@ -2,6 +2,9 @@
 #include <ros/package.h>
 #include <std_msgs/Bool.h>
 #include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
+#include <sensor_msgs/image_encodings.h>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "topic_names.h"
 
@@ -12,6 +15,21 @@ image_transport::Subscriber right_sub;
 std::bool new_left = false;
 std::bool new_right = false;
 
+// Converting ROS images into OpenCV images, using cv_bridge
+namespace cv_bridge {
+
+class CvImage
+{
+public:
+  std_msgs::Header header;
+  std::string encoding;
+  cv::Mat image;
+};
+
+typedef boost::shared_ptr<CvImage> CvImagePtr;
+typedef boost::shared_ptr<CvImage const> CvImageConstPtr;
+
+}
 
 void leftImageCallback(const sensor_msgs::ImageConstPtr& msg){
 	//Convert to opencv image using cv bridge
