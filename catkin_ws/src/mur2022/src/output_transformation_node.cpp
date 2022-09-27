@@ -6,12 +6,23 @@
 
 // Declare "member" variables
 ros::Subscriber control_output_sub;
+ros::Subscriber safety_sub;
 ros::Publisher control_output_pub;
+
+bool safe = true;
 
 // Respond to subscriber receiving a message
 void sendControlOutputs(const geometry_msgs::Twist msg){
-	control_output_pub.publish(msg);
+	if (!safe) {
+		control_output_pub.publish(msg);
+	}
 }
+
+void updateSafety(const std_msgs::Bool msg){
+	safe = msg.data;
+}
+
+
 
 int main(int argc, char* argv[]) {
 	// Initialise the node
@@ -19,6 +30,7 @@ int main(int argc, char* argv[]) {
 	ros::NodeHandle nh("~");
 
 	// Initialise a subscriber
+	safety_sub = nh.subscribe("/safe", 1, updateSafety);
 	control_output_sub = nh.subscribe("/husky_velocity_controller/cmd_vel", 1, sendControlOutputs);
 	control_output_pub = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 10);
 
