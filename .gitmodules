@@ -7,7 +7,9 @@
 [submodule "catkin_ws/src/pylon-ros-camera"]
 	path = catkin_ws/src/pylon-ros-camera
 	url = https://github.com/basler/pylon-ros-camera
+[submodule "catkin_ws/src/LeGO-LOAM-BOR"]
+	path = catkin_ws/src/LeGO-LOAM-BOR
+	url = https://github.com/facontidavide/LeGO-LOAM-BOR
 [submodule "catkin_ws/src/HuskyControl"]
 	path = catkin_ws/src/HuskyControl
 	url = https://github.com/MURDriverless/HuskyControl
-
