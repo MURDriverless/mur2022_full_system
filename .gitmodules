@@ -1,12 +1,15 @@
-[submodule "catkin_ws/catkin_ws/src/dragandbot_common"]
-	path = catkin_ws/catkin_ws/src/dragandbot_common
+[submodule "catkin_ws/src/dragandbot_common"]
+	path = catkin_ws/src/dragandbot_common
 	url = https://github.com/dragandbot/dragandbot_common
-[submodule "catkin_ws/catkin_ws/src/ouster_example"]
-	path = catkin_ws/catkin_ws/src/ouster_example
+[submodule "catkin_ws/src/ouster_example"]
+	path = catkin_ws/src/ouster_example
 	url = https://github.com/ouster-lidar/ouster_example
-[submodule "catkin_ws/catkin_ws/src/pylon-ros-camera"]
-	path = catkin_ws/catkin_ws/src/pylon-ros-camera
+[submodule "catkin_ws/src/pylon-ros-camera"]
+	path = catkin_ws/src/pylon-ros-camera
 	url = https://github.com/basler/pylon-ros-camera
 [submodule "catkin_ws/src/LeGO-LOAM-BOR"]
 	path = catkin_ws/src/LeGO-LOAM-BOR
 	url = https://github.com/facontidavide/LeGO-LOAM-BOR
+[submodule "catkin_ws/src/HuskyControl"]
+	path = catkin_ws/src/HuskyControl
+	url = https://github.com/MURDriverless/HuskyControl
