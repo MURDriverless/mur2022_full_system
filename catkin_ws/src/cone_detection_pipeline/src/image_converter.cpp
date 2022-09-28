@@ -13,13 +13,12 @@ class ImageConverter
   image_transport::Publisher image_pub_;
 
 public:
-  ImageConverter()
+  ImageConverter(std::string input_mes, std::string output_mes)
     : it_(nh_)
   {
     // Subscrive to input video feed and publish output video feed
-    image_sub_ = it_.subscribe("/camera/image_raw", 1,
-      &ImageConverter::imageCb, this);
-    image_pub_ = it_.advertise("/image_converter/output_video", 1);
+    image_sub_ = it_.subscribe(input_mes, 1, &ImageConverter::imageCb, this);
+    image_pub_ = it_.advertise(output_mes, 1);
 
   }
 

@@ -6,6 +6,7 @@
 #include <sensor_msgs/image_encodings.h>
 #include <opencv2/imgproc/imgproc.hpp>
 
+
 #include "topic_names.h"
 
 // Declare "member" variables
@@ -16,7 +17,7 @@ std::bool new_left = false;
 std::bool new_right = false;
 
 // Converting ROS images into OpenCV images, using cv_bridge
-namespace cv_bridge {
+namespace cv_bridgeI {
 
 class CvImage
 {
@@ -31,13 +32,20 @@ typedef boost::shared_ptr<CvImage const> CvImageConstPtr;
 
 }
 
+// CV image pointers
+cv_bridgeI::CvImagePtr LeftPtr;
+cv_bridgeI::CVImagePtr RightPtr;
+
+
 void leftImageCallback(const sensor_msgs::ImageConstPtr& msg){
 	//Convert to opencv image using cv bridge
+	LeftPtr = cv_bridge::toCvCopy(msg);
 	//Set flag to true
 	new_left = true;
 }
 void rightImageCallback(const sensor_msgs::ImageConstPtr& msg){
 	//Convert to opencv image using cv bridge
+	RightPtr = cv_bridge::toCvCopy(msg);
 	//Set flag to true
 	new_right = true;
 }
