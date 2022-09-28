@@ -31,7 +31,6 @@ std::vector<std::string> color;
 // Checks if the new cone has already been found
 static bool needToAdd(float x, float y);
 
-
 // Uses current pose and measured position to get the global cone location
 static geometry_msgs::Point getConeGlobalPosition(geometry_msgs::PointStamped local_point);
 
@@ -115,7 +114,7 @@ static void publishCones(void) {
   cones.colour = color;
   
   cones.frame_id = "/camera_init"
-  
+
   pub_cones.publish(cones);   
   */
 }
