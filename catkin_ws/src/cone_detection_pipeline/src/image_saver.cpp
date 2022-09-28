@@ -20,24 +20,11 @@ int saveL = 0;
 int saveR = 0;
 
 // Converting ROS images into OpenCV images, using cv_bridge
-namespace cv_bridgeI {
 
-class CvImage
-{
-public:
-  std_msgs::Header header;
-  std::string encoding;
-  cv::Mat image;
-};
-
-typedef boost::shared_ptr<CvImage> CvImagePtr;
-typedef boost::shared_ptr<CvImage const> CvImageConstPtr;
-
-}
 
 // CV image pointers
-cv_bridgeI::CvImagePtr LeftPtr;
-cv_bridgeI::CvImagePtr RightPtr;
+cv_bridge::CvImagePtr LeftPtr;
+cv_bridge::CvImagePtr RightPtr;
 
 
 void leftImageCallback(const sensor_msgs::ImageConstPtr& msg){
