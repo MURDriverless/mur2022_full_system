@@ -21,7 +21,6 @@ find_package(catkin REQUIRED COMPONENTS
   visualization_msgs
   pcl_conversions
   pcl_ros
-  OpenCV
 )
 
 ## System dependencies are found with CMake's conventions
@@ -158,7 +157,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/cone_detection_pipeline_node.cpp)
 
-add_executable(image_saver      src/image_saver.cpp) 
+
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
