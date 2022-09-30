@@ -10,7 +10,7 @@ from cv_bridge import CvBridge
 
 
 # Please add a path!
-SAVE_IMAGE_PATH = ""
+SAVE_IMAGE_PATH = "/media/mur/XavierSSD1/mur2022_full_system/runImages"
 
 SAVE = 30
 SKIP = 30
@@ -29,17 +29,23 @@ class ImageSaver:
 
     def rightInput(self, msg):
         if self.r_saved < SAVE and self.r_to_skip <= 0:
-            cv.imwrite(SAVE_IMAGE_PATH + "/right/" + str(self.r_saved) + ".png", self.cv_bridge.imgmsg_to_cv2(msg))
+            img_path = SAVE_IMAGE_PATH + "/right/" + str(self.r_saved) + ".png"
+            img = cv.cvtColor(self.cv_bridge.imgmsg_to_cv2(msg), cv.COLOR_BGR2RGB)
+            cv.imwrite(img_path, img)
             self.r_saved += 1
             self.r_to_skip = SKIP
+            print("Saved Right Image to:" + img_path)
         else:
             self.r_to_skip -= 1
     
     def leftInput(self, msg):
         if self.l_saved < SAVE and self.l_to_skip <= 0:
-            cv.imwrite(SAVE_IMAGE_PATH + "/left/" + str(self.l_saved) + ".png", self.cv_bridge.imgmsg_to_cv2(msg))
+            img_path = SAVE_IMAGE_PATH + "/left/" + str(self.r_saved) + ".png"
+            img = cv.cvtColor(self.cv_bridge.imgmsg_to_cv2(msg), cv.COLOR_BGR2RGB)
+            cv.imwrite(img_path, img)
             self.l_saved += 1
             self.l_to_skip = SKIP
+            print("Saved Left Image to:" + img_path)
         else:
             self.l_to_skip -= 1
     
@@ -54,4 +60,4 @@ if __name__ == '__main__':
     rospy.spin()
 
     # Close any OpenCV windows
-    cv2.destroyAllWindows()
+    cv.destroyAllWindows()
