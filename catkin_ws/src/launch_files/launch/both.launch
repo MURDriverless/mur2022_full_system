@@ -1,4 +1,0 @@
-<launch> 
-   <include file="/media/mur/XavierSSD1/PlsWorkBasler/src/ouster_example/ouster_ros/launch/mur_sensor.launch"/>
-   <include file="/media/mur/XavierSSD1/PlsWorkBasler/src/pylon-ros-camera/pylon_camera/launch/pylon_camera_both.launch"/>
-</launch>

@@ -1,0 +1,4 @@
+<launch> 
+   <include file="$(find mur2022)/launch/ControlTranslation.launch"/>
+   <include file="$(find husky_mpcc)/launch/slow2fastPipeline.launch"/>
+</launch>

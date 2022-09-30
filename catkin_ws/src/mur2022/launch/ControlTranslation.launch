@@ -1,0 +1,9 @@
+<launch>	
+	<node
+		pkg    = "mur2022"
+		name   = "output_transform"
+		output = "screen"
+		type   = "output_transformation_node"
+		>
+	</node>
+</launch>
