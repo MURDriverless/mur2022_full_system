@@ -5,62 +5,48 @@
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
 #include <opencv2/imgproc/imgproc.hpp>
-
-
-#include "topic_names.h"
-
-// Declare "member" variables
-image_transport::Subscriber left_sub;
-image_transport::Subscriber right_sub;
-
-// Converting ROS images into OpenCV images, using cv_bridge
-namespace cv_bridgeI {
-
-class CvImage
-{
-public:
-  std_msgs::Header header;
-  std::string encoding;
-  cv::Mat image;
-};
-
-typedef boost::shared_ptr<CvImage> CvImagePtr;
-typedef boost::shared_ptr<CvImage const> CvImageConstPtr;
-
-}
+#include <opencv2/opencv.hpp>
 
 #define SKIP 30
-#define SAVE 60
+#define SAVE 30
+
+// Declare "member" variables
+ros::Subscriber left_sub;
+ros::Subscriber right_sub;
+
+int skipL = SKIP;
+int skipR = SKIP;
+int saveL = 0;
+int saveR = 0;
+
+// Converting ROS images into OpenCV images, using cv_bridge
+
+
 // CV image pointers
-cv_bridgeI::CvImagePtr LeftPtr;
-cv_bridgeI::CVImagePtr RightPtr;
-int savedCountL = 0;
-int savedCountR = 0;
-int skipCountL = SKIP;
-int skipCountR = SKIP;
+cv_bridge::CvImagePtr LeftPtr;
+cv_bridge::CvImagePtr RightPtr;
+
 
 void leftImageCallback(const sensor_msgs::ImageConstPtr& msg){
-	if skipCountL <= 0 {
-	//Convert to opencv image using cv bridge
+	if (skipL <= 0 && saveL < SAVE) {
 		LeftPtr = cv_bridge::toCvCopy(msg);
-		
-	}
-}
-void rightImageCallback(const sensor_msgs::ImageConstPtr& msg){
-	//Convert to opencv image using cv bridge
-	RightPtr = cv_bridge::toCvCopy(msg);
-	//Set flag to true
-	new_right = true;
+		cv::imwrite("LeftRosbag/" + std::to_string(saveL) + ".png", LeftPtr->image);
+		skipL = SKIP;
+		saveL += 1;
+	} else {
+		skipL -= 1;
+	}	
 }
 
-void run_pipeline(const ros::TimerEvent& timer){
-	if (new_left && new_right) {
-		//GIVE IMAGES TO CLASS
-		new_left = false;
-		new_right = false;		
-		//RUN THE PIPELINE
-			
-	}	
+void rightImageCallback(const sensor_msgs::ImageConstPtr& msg){
+	if (skipR <= 0 && saveR < SAVE) {
+		RightPtr = cv_bridge::toCvCopy(msg);
+		cv::imwrite("RightRosbag/" + std::to_string(saveR) + ".png", RightPtr->image);
+		skipR = SKIP;
+		saveR += 1;
+	} else {
+		skipR -= 1;
+	}
 }
 
 int main(int argc, char* argv[]) {
@@ -68,13 +54,9 @@ int main(int argc, char* argv[]) {
 	ros::init(argc, argv, "mur_stereo_ros_node");
 	ros::NodeHandle nh;
     
-	image_transport::ImageTransport it(nh);
-	left_sub = it.subscribe("/CameraLeft/image_raw", 1, leftImageCallback);
-	right_sub = it.subscribe("/CameraRight/image_raw", 1, rightImageCallback);
-	ros::Timer timer = nh.createTimer(ros::Duration(0.05), run_pipeline);
+	left_sub = nh.subscribe("/CameraLeft/image_raw", 1, leftImageCallback);
+	right_sub = nh.subscribe("/CameraRight/image_raw", 1, rightImageCallback);
     
-	// Initialise a publisher
-	cones_pub = nh.advertise<cone_msg>(CONE_DETECTED_TOPIC, 10, false);
 
 	// Spin as a single-threaded node
 	ros::spin();
