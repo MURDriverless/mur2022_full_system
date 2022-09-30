@@ -54,4 +54,4 @@ if __name__ == '__main__':
     rospy.spin()
 
     # Close any OpenCV windows
-    cv2.destroyAllWindows()
+    cv.destroyAllWindows()
