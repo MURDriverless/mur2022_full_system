@@ -1,0 +1,11 @@
+digraph G {
+"camera" -> "base_link"[label="Broadcaster: /base_link_to_camera\nAverage rate: 9.950 Hz\nMost recent transform: 1663134169.795 ( -0.100 sec old)\nBuffer length: 4.924 sec\n"];
+"camera_init" -> "camera"[label="Broadcaster: /lego_loam_bor\nAverage rate: 10.216 Hz\nMost recent transform: 1663134169.675 ( 0.020 sec old)\nBuffer length: 4.894 sec\n"];
+"map" -> "camera_init"[label="Broadcaster: /camera_init_to_map\nAverage rate: 9.950 Hz\nMost recent transform: 1663134169.795 ( -0.100 sec old)\nBuffer length: 4.924 sec\n"];
+"camera_init" -> "laser_odom"[label="Broadcaster: /lego_loam_bor\nAverage rate: 10.203 Hz\nMost recent transform: 124.025 ( 1663134045.671 sec old)\nBuffer length: 4.900 sec\n"];
+"camera_init" -> "aft_mapped"[label="Broadcaster: /lego_loam_bor\nAverage rate: 2.233 Hz\nMost recent transform: 1663134169.612 ( 0.083 sec old)\nBuffer length: 4.479 sec\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1663134169.695"[ shape=plaintext ] ;
+ }->"map";
+}
