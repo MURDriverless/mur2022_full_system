@@ -127,3 +127,6 @@ cv.imshow("Left", img5)
 cv.waitKey(0)
 cv.imshow("Right", img3)
 cv.waitKey(0)
+
+R1, R2, P1, P2, Q, roi1, roi2 = cv.stereoRectify(mtxL, distL, mtxR, distR, rightImage.shape, R, T)
+print("Stereo Rectified")
