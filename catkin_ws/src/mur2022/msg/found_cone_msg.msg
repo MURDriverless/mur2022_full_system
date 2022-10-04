@@ -1,2 +1,2 @@
-geometry_msgs::PointStamped point
+geometry_msgs/PointStamped point
 string colour

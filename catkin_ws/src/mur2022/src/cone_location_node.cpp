@@ -14,11 +14,12 @@
 
 #include "topic_names.h"
 #include "mur_common/cone_msg.h" 
+#include "mur2022/found_cone_msg.h"
 
 #define CONES_DIST_THRESHOLD 1.5
 
 // Declare "member" variables
-ros::Publisher full_cone_pub;
+ros::Publisher full_cones_pub;
 ros::Subscriber cones_found_sub;
 // ros::Subscriber pose_sub;
 
@@ -26,7 +27,7 @@ tf::TransformListener tf_listener;
 
 std::vector<float> cones_x;
 std::vector<float> cones_y;
-std::vector<std::string> color;
+std::vector<std::string> colour;
 
 // Checks if the new cone has already been found
 static bool needToAdd(float x, float y);
@@ -38,14 +39,14 @@ static geometry_msgs::Point getConeGlobalPosition(geometry_msgs::PointStamped lo
 static void publishCones(void);
 
 // Callback for new cones found location;
-void foundCones(const geometry_msgs::Point& msg);
+void foundCones(const mur2022::found_cone_msg& msg);
 
 int main(int argc, char* argv[]) {
   // Initialise the node
   ros::init(argc, argv, "cone_location_node");
   ros::NodeHandle nh("~");
 
-  full_cone_pub = nh.advertise<std_msgs::Bool>(CONES_FULL_TOPIC, 1, false);
+  full_cones_pub = nh.advertise<mur_common::cone_msg>(CONES_FULL_TOPIC, 1, false);
 
   cones_found_sub = nh.subscribe(CONE_DETECTED_TOPIC, 1, foundCones);
 
@@ -54,17 +55,11 @@ int main(int argc, char* argv[]) {
   return 0;
 }
 
-void foundCones(const geometry_msgs::Point& msg) {
-  
-  /** This will be what is needed when the mur_common file is used. 
-  geometry_msgs::PointStamped stamped_point = msg.point;   
-  */
+void foundCones(const mur2022::found_cone_msg& msg) {
   geometry_msgs::PointStamped stamped_point;
 
-  stamped_point.header.frame_id = "/camera";
-  stamped_point.header.stamp = ros::Time::now();
-  stamped_point.point = msg;
-  
+  stamped_point = msg.point;
+
   geometry_msgs::Point global_point = getConeGlobalPosition(stamped_point);
 	
   if(needToAdd(global_point.x, global_point.y)) {		
@@ -72,8 +67,7 @@ void foundCones(const geometry_msgs::Point& msg) {
 		cones_y.push_back(global_point.y);
 		
 		// NEED TO CHANGE THIS
-    // colour.push_back(msg.colour);
-		color.push_back("blue");
+    colour.push_back(msg.colour);
 		publishCones();
 	} else {
 		std::cout << "Cone found at: (" << global_point.x << ", " << global_point.y << ") too close to another cone.";
@@ -84,7 +78,7 @@ static geometry_msgs::Point getConeGlobalPosition(geometry_msgs::PointStamped lo
   
   geometry_msgs::PointStamped global_point;
 
-  tf_listener.transformPoint("/camera_init", local_point, global_point);
+  tf_listener.transformPoint("/map", local_point, global_point);
 
   return global_point.point;
 }
@@ -99,22 +93,16 @@ static bool needToAdd(float x, float y) {
   return true;
 }
 
-static void publishCones(void) {
-  std::cout<<"Bill hasn't fixed this yet. Tell him to!"<<std::endl;
-
-  /**
+static void publishCones(void) {  
   ros::Time current_time = ros::Time::now();
   
   mur_common::cone_msg cones;
-  cones.header.frame_id = "/camera_init";
+  cones.header.frame_id = "/map";
   cones.header.stamp = current_time;
-  
+
   cones.x = cones_x;
   cones.y = cones_y;
-  cones.colour = color;
-  
-  cones.frame_id = "/camera_init"
+  cones.colour = colour;
 
-  pub_cones.publish(cones);   
-  */
+  full_cones_pub.publish(cones);
 }

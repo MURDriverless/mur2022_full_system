@@ -67,6 +67,7 @@ find_package(Eigen3 REQUIRED)
 add_message_files(
   FILES
   place_holder_msg.msg
+  found_cone_msg.msg
 )
 
 ## Generate services in the 'srv' folder
