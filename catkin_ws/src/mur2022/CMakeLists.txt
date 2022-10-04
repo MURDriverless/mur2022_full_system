@@ -21,6 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
   visualization_msgs
   pcl_conversions
   pcl_ros
+  mur_common
 )
 
 find_package(
