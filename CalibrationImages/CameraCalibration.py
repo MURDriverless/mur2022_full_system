@@ -12,7 +12,7 @@ objp[:,:2] = np.mgrid[0:7,0:9].T.reshape(-1,2)*20
 # Arrays to store object points and image points from all the images.
 objpoints = [] # 3d point in real world space
 imgpointsL = [] # 2d points in image plane.
-imagesLeft = glob.glob('Left/*')
+imagesLeft = glob.glob('left/*')
 for fname in imagesLeft:
     img = cv.imread(fname)
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
@@ -30,7 +30,7 @@ for fname in imagesLeft:
 cv.destroyAllWindows()
 
 imgpointsR = []
-imagesRight = glob.glob('Right/*')
+imagesRight = glob.glob('right/*')
 for fname in imagesRight:
     img = cv.imread(fname)
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
@@ -83,8 +83,8 @@ print(PL)
 print(PR)
 
 imageID = "1.bmp"
-leftImage = cv.imread('Left/' + imageID)
-rightImage = cv.imread('Right/' + imageID)
+leftImage = cv.imread('left/' + imageID)
+rightImage = cv.imread('right/' + imageID)
 
 leftImage = cv.cvtColor(leftImage, cv.COLOR_BGR2GRAY)
 rightImage = cv.cvtColor(rightImage, cv.COLOR_BGR2GRAY)
