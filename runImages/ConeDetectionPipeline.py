@@ -49,7 +49,7 @@ Q = np.array([[ 1.00000000e+00,  0.00000000e+00,  0.00000000e+00, 1.25297165e+03
 roi1 = (0, 0, 190, 1243)
 roi2 = (0, 0, 753, 1418)
 
-img_id = 2
+img_id = 1
 right_image = cv.imread("right/"  + str(img_id) + ".png")
 left_image = cv.imread("left/" + str(img_id) + ".png")
 right_image_og = right_image
@@ -194,6 +194,7 @@ cv.putText(left_image, label, (0, 15), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255)
 
 cv.imshow("Found Cones left", left_image)
 cv.waitKey(1000)
+cv.imwrite("Found_cones_left.png", left_image)
 
 # TODO: Find Matches between found cones
 # PROBLEM: Fundamental matrix is not great - giving bad matches = poor stereo calibration
