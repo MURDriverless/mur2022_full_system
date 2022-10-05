@@ -32,6 +32,10 @@ catkin_ws/src/CMakeLists.txt
 catkin_ws/src/asclinic_pkg/src/drivers/build/
 catkin_ws/src/asclinic_pkg/src/drivers/bin/
 
+# Ignore Calibration images
+CalibrationImages/left/
+CalibrationImages/right/
+
 # Ignore typical unwanted files
 .DS_Store
 .vscode
