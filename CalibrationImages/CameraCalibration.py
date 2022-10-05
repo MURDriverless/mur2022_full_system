@@ -1,14 +1,17 @@
 import glob
+from random import random
 
 import cv2 as cv
 import numpy as np
+
+
 
 
 # termination criteria
 criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
 objp = np.zeros((7*9,3), np.float32)
-objp[:,:2] = np.mgrid[0:7,0:9].T.reshape(-1,2)*20
+objp[:,:2] = np.mgrid[0:7,0:9].T.reshape(-1,2)*0.02
 # Arrays to store object points and image points from all the images.
 objpoints = [] # 3d point in real world space
 imgpointsL = [] # 2d points in image plane.
@@ -19,9 +22,14 @@ imagesRight = glob.glob('right/*')
 imagesRight = sorted(imagesRight)
 print("CUDA")
 print(cv.cuda.getCudaEnabledDeviceCount())
+print(len(imagesLeft))
 for i in range(len(imagesLeft)):
-    if (i % 100 == 0):
+    if (i % 10 == 0):
         print(i)
+    if random() < 0.9:
+        print("Skipped")
+        continue
+    print("Used")
     imgL = cv.imread(imagesLeft[i])
     imgR = cv.imread(imagesRight[i])
     grayL = cv.cvtColor(imgL, cv.COLOR_BGR2GRAY)
@@ -33,22 +41,23 @@ for i in range(len(imagesLeft)):
     # If found, add object points, image points (after refining them)
     if retL == True and retR == True:
         objpoints.append(objp)
+        cornersL = cv.cornerSubPix(grayL, cornersL, (11,11), (-1,-1), criteria)
+        cornersR = cv.cornerSubPix(grayR, cornersR, (11,11), (-1,-1), criteria)
         imgpointsL.append(cornersL)
-        cv.drawChessboardCorners(grayL, (7,9), cornersL, retL)
-        cv.imshow("Left", grayL)
-        cv.waitKey(500)
-        cv.drawChessboardCorners(grayR, (7,9), cornersR, retR)
-        cv.imshow("Right", grayR)
-        cv.waitKey(500)
         imgpointsR.append(cornersR)
         # Draw and display the corners
     else:
         print("Rejected!")
-        print(i)
+        print(imagesLeft[i])
         cv.imshow("Left", grayL)
-        cv.waitKey(500)
+        cv.waitKey(1000)
         cv.imshow("Right", grayR)
-        cv.waitKey(500)
+        cv.waitKey(1000)
+
+
+print("All Points Found")
+print(len(imgpointsL))
+print("Calibrating")
         
 
 # Camera Calibrations
@@ -69,7 +78,7 @@ print("Camera Right Matrix")
 print(mtxR)
 
 # Stereo Calibration
-ret, mtxL, distL, mtxR, distR, R, T, E, F = cv.stereoCalibrate(objpoints, imgpointsL, imgpointsR, mtxL, distL, mtxR, distR, gray.shape[::-1])
+ret, mtxL, distL, mtxR, distR, R, T, E, F = cv.stereoCalibrate(objpoints, imgpointsL, imgpointsR, mtxL, distL, mtxR, distR, grayL.shape[::-1])
 if not ret:
     print("Error, Stereo Calibration")
     exit()
@@ -99,10 +108,7 @@ PR = mtxR @ RTR
 print("Projection Matrices")
 print(PL)
 print(PR)
-
-# imageID = "1.bmp"
-# leftImage = cv.imread('Left/' + imageID)
-# rightImage = cv.imread('Right/' + imageID)
+550
 
 # leftImage = cv.cvtColor(leftImage, cv.COLOR_BGR2GRAY)
 # rightImage = cv.cvtColor(rightImage, cv.COLOR_BGR2GRAY)
