@@ -10,10 +10,10 @@ from cv_bridge import CvBridge
 
 
 # Please add a path!
-SAVE_IMAGE_PATH = "/media/mur/XavierSSD1/mur2022_full_system/runImages"
+SAVE_IMAGE_PATH = "/media/mur/XavierSSD1/mur2022_full_system/CalibrationImages"
 
-SAVE = 30
-SKIP = 30
+SAVE = 5000
+SKIP = 0
 
 class ImageSaver:
     def __init__(self):
