@@ -49,7 +49,7 @@ Q = np.array([[ 1.00000000e+00,  0.00000000e+00,  0.00000000e+00, 1.25297165e+03
 roi1 = (0, 0, 190, 1243)
 roi2 = (0, 0, 753, 1418)
 
-img_id = 3
+img_id = 2
 right_image = cv.imread("right/"  + str(img_id) + ".png")
 left_image = cv.imread("left/" + str(img_id) + ".png")
 right_image_og = right_image
@@ -92,7 +92,8 @@ def getOutputsNames(net):
     # Get the names of all the layers in the network
     layersNames = net.getLayerNames()
     # Get the names of the output layers, i.e. the layers with unconnected outputs
-    return [layersNames[i - 1] for i in net.getUnconnectedOutLayers()]
+    check = net.getUnconnectedOutLayers().tolist()
+    return [layersNames[i[0] - 1] for i in check]
 
 # Draw the predicted bounding box
 def drawPred(image, classId, conf, left, top, right, bottom):
@@ -145,6 +146,7 @@ def postprocess(image, outs):
     oBoxes = []
     oClasses = []
     for i in indices:
+        i = i[0]
         box = boxes[i]
         oBoxes.append(box)
         oClasses.append(classIds[i])
@@ -277,7 +279,7 @@ lines2 = cv.computeCorrespondEpilines(centerL.reshape(-1,1,2), 1,Fnew)
 lines2 = lines2.reshape(-1,3)
 img3,img4 = drawlines(img2,img1,lines2,pts2,pts1)
 cv.imshow("right image", img3)
-cv.waitKey(1000)
+cv.waitKey(0)
 print(Fnew)
 # TODO: Once Matches have been found compute cone locations
 # triangulate points
