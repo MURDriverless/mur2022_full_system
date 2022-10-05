@@ -28,6 +28,10 @@ catkin_ws/.catkin_tools/
 # Ignore the auto-generated "CMakeLists.txt" of the catkin_ws
 catkin_ws/src/CMakeLists.txt
 
+# Ignore the 3000 calibration images
+CalibrationImages/right/
+CalibrationImages/left/
+
 # Ignore the "build" and "bin" folder of the drivers
 catkin_ws/src/asclinic_pkg/src/drivers/build/
 catkin_ws/src/asclinic_pkg/src/drivers/bin/
