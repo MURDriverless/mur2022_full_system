@@ -1,7 +1,10 @@
 import glob
+from random import random
 
 import cv2 as cv
 import numpy as np
+
+
 
 
 # termination criteria
@@ -12,51 +15,62 @@ objp[:,:2] = np.mgrid[0:7,0:9].T.reshape(-1,2)*0.02
 # Arrays to store object points and image points from all the images.
 objpoints = [] # 3d point in real world space
 imgpointsL = [] # 2d points in image plane.
-imagesLeft = glob.glob('Left/*')
-for fname in imagesLeft:
-    img = cv.imread(fname)
-    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    # Find the chess board corners
-    ret, corners = cv.findChessboardCorners(gray, (7,9), None)
-    # If found, add object points, image points (after refining them)
-    if ret == True:
-        objpoints.append(objp)
-        corners2 = cv.cornerSubPix(gray,corners, (11,11), (-1,-1), criteria)
-        imgpointsL.append(corners)
-        # Draw and display the corners
-        cv.drawChessboardCorners(img, (7,9), corners2, ret)
-        cv.imshow('img', img)
-        cv.waitKey(5)
-cv.destroyAllWindows()
-
+imagesLeft = glob.glob('left/*')
+imagesLeft = sorted(imagesLeft)
 imgpointsR = []
-imagesRight = glob.glob('Right/*')
-for fname in imagesRight:
-    img = cv.imread(fname)
-    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+imagesRight = glob.glob('right/*')
+imagesRight = sorted(imagesRight)
+print("CUDA")
+print(cv.cuda.getCudaEnabledDeviceCount())
+print(len(imagesLeft))
+for i in range(len(imagesLeft)):
+    if (i % 10 == 0):
+        print(i)
+    if random() < 0.9:
+        print("Skipped")
+        continue
+    print("Used")
+    imgL = cv.imread(imagesLeft[i])
+    imgR = cv.imread(imagesRight[i])
+    grayL = cv.cvtColor(imgL, cv.COLOR_BGR2GRAY)
+    grayR = cv.cvtColor(imgR, cv.COLOR_BGR2GRAY)
     # Find the chess board corners
-    ret, corners = cv.findChessboardCorners(gray, (7,9), None)
+    retL, cornersL = cv.findChessboardCorners(grayL, (7,9), None)
+    retR, cornersR = cv.findChessboardCorners(grayR, (7,9), None)
+    cv.destroyAllWindows()
     # If found, add object points, image points (after refining them)
-    if ret == True:
-        corners2 = cv.cornerSubPix(gray,corners, (11,11), (-1,-1), criteria)
-        imgpointsR.append(corners)
+    if retL == True and retR == True:
+        objpoints.append(objp)
+        cornersL = cv.cornerSubPix(grayL, cornersL, (11,11), (-1,-1), criteria)
+        cornersR = cv.cornerSubPix(grayR, cornersR, (11,11), (-1,-1), criteria)
+        imgpointsL.append(cornersL)
+        imgpointsR.append(cornersR)
         # Draw and display the corners
-        cv.drawChessboardCorners(img, (7,9), corners2, ret)
-        cv.imshow('img', img)
-        cv.waitKey(5)
-cv.destroyAllWindows()
+    else:
+        print("Rejected!")
+        print(imagesLeft[i])
+        cv.imshow("Left", grayL)
+        cv.waitKey(1000)
+        cv.imshow("Right", grayR)
+        cv.waitKey(1000)
+
+
+print("All Points Found")
+print(len(imgpointsL))
+print("Calibrating")
+        
 
 # Camera Calibrations
 if not len(imgpointsL) == len(imgpointsR):
     print("Error, not all points found")
     exit()
-ret, mtxL, distL, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpointsL, gray.shape[::-1], None, None)
+ret, mtxL, distL, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpointsL, grayL.shape[::-1], None, None)
 if not ret:
     print("Error, Camera Left Calibration")
     exit()
 print("Camera Left Matrix")
 print(mtxL)
-ret, mtxR, distR, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpointsR, gray.shape[::-1], None, None)
+ret, mtxR, distR, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpointsR, grayL.shape[::-1], None, None)
 if not ret:
     print("Error, Camera Right Calibration")
     exit()
@@ -64,14 +78,27 @@ print("Camera Right Matrix")
 print(mtxR)
 
 # Stereo Calibration
-ret, mtxL, distL, mtxR, distR, R, T, E, F = cv.stereoCalibrate(objpoints, imgpointsL, imgpointsR, mtxL, distL, mtxR, distR, gray.shape[::-1])
+ret, mtxL, distL, mtxR, distR, R, T, E, F = cv.stereoCalibrate(objpoints, imgpointsL, imgpointsR, mtxL, distL, mtxR, distR, grayL.shape[::-1])
 if not ret:
     print("Error, Stereo Calibration")
     exit()
+print("Calibration Matrix L")
+print(mtxL)
+print("Distortion L")
+print(distL)
+print("Calibration Matrix R")
+print(mtxR)
+print("Distortion R")
+print(distR)
 print("Rotation")
 print(R)
 print("Translation")
 print(T)
+
+print("Essential")
+print(E)
+print("Fundamental")
+print(F)
 
 RTL = np.concatenate([np.eye(3), [[0],[0],[0]]], axis=-1)
 PL = mtxL @ RTL
@@ -81,23 +108,21 @@ PR = mtxR @ RTR
 print("Projection Matrices")
 print(PL)
 print(PR)
+550
 
-imageID = "1.bmp"
-leftImage = cv.imread('Left/' + imageID)
-rightImage = cv.imread('Right/' + imageID)
+# leftImage = cv.cvtColor(leftImage, cv.COLOR_BGR2GRAY)
+# rightImage = cv.cvtColor(rightImage, cv.COLOR_BGR2GRAY)
 
-leftImage = cv.cvtColor(leftImage, cv.COLOR_BGR2GRAY)
-rightImage = cv.cvtColor(rightImage, cv.COLOR_BGR2GRAY)
+# ret, leftPoints = cv.findChessboardCorners(leftImage, (7,9), None)
+# leftPoints = cv.undistortImagePoints(leftPoints, mtxL, distL)
+# ret, rightPoints = cv.findChessboardCorners(rightImage, (7, 9), None)
+# rightPoints = cv.undistortImagePoints(rightPoints, mtxR, distR)
 
-ret, leftPoints = cv.findChessboardCorners(leftImage, (7,9), None)
-leftPoints = cv.undistortImagePoints(leftPoints, mtxL, distL)
-ret, rightPoints = cv.findChessboardCorners(rightImage, (7, 9), None)
-rightPoints = cv.undistortImagePoints(rightPoints, mtxR, distR)
-
-points4H = cv.triangulatePoints(PL, PR, leftPoints, rightPoints)
+# points4H = cv.triangulatePoints(PL, PR, leftPoints, rightPoints)
 
 points3D = points4H[0:3,:]/points4H[3,:]
 print (points3D)
+
 
 def drawlines(img1,img2,lines,pts1,pts2):
     ''' img1 - image on which we draw the epilines for the points in img2
