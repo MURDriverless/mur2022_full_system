@@ -92,6 +92,16 @@ modelWeights = "yolov4-tiny-cones_best.weights"
 
 net = cv.dnn.readNetFromDarknet(modelConfiguration, modelWeights)
 
+if(not cv.cuda.getCudaEnabledDeviceCount()):
+    net.setPreferableBackend(cv.dnn.DNN_BACKEND_OPENCV)
+    net.setPreferableTarget(cv.dnn.DNN_TARGET_CPU)
+    print('Using CPU device.')
+else:
+    net.setPreferableBackend(cv.dnn.DNN_BACKEND_CUDA)
+    net.setPreferableTarget(cv.dnn.DNN_TARGET_CUDA)
+    print('Using GPU device.')
+
+
 objpoints = [] # 3d point in real world space
 imgpointsL = [] # 2d points in image plane.
 imgpointsR = []
@@ -122,8 +132,6 @@ for image_name in images:
         y = box[1] + box[3]/2
         center.append([x, y])
     center = np.array(center)
-    print(center)
-
     for point, cl in zip(center, classes):
         x, y = point
         if cl == 0:
@@ -136,6 +144,103 @@ for image_name in images:
             color = (0, 0, 0)
         image = cv.circle(image,(int(x),int(y)),5,color,-1)
     
-    cv.imshow("Found Cones", image)
-    cv.waitKey(100)    
+    image_name = image_name.replace("Camera Calibration GRID IMAGES/", "").replace(".png","")
+    side, x, y = image_name.split("_")
+    x = float(x)
+    y = float(y)
+    try:
+        ind = objpoints.index([x, y, 0])
+    except ValueError:
+        objpoints.append([x, y, 0])
+        ind = objpoints.index([x, y, 0])
     
+    if side == 'R':
+        while len(imgpointsR) <= ind:
+            imgpointsR.append([])
+        imgpointsR[ind] = center[0]
+    elif side == 'L':
+        while len(imgpointsL) <= ind:
+            imgpointsL.append([])
+        imgpointsL[ind] = center[0]
+    else:
+        print("ERROR! Invalid file name")
+        exit()
+    
+    
+
+
+    # cv.destroyAllWindows()
+    # w, h, c = image.shape
+    # imageZ = cv.resize(image, (int(h/2), int(w/2)))
+    # cv.imshow(image_name, imageZ)
+    # cv.waitKey(100)
+
+cv.destroyAllWindows()
+        
+objpoints = np.array([objpoints], dtype=np.float32)
+imgpointsL = np.array([imgpointsL], dtype=np.float32)
+imgpointsR = np.array([imgpointsR], dtype=np.float32)
+print("RealWorld")
+print(objpoints)
+print("Image Points L")
+print(imgpointsL)
+print("Image Points R")
+print(imgpointsR)
+
+w, h, c = image.shape
+
+if not len(imgpointsL) == len(imgpointsR):
+    print("Error, not all points found")
+    exit()
+ret, mtxL, distL, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpointsL, (w, h), None, None)
+print("Camera 1 Rotation")
+print(rvecs)
+print("Camera 1 Translation")
+print(tvecs)
+if not ret:
+    print("Error, Camera Left Calibration")
+    exit()
+ret, mtxR, distR, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpointsR, (w, h), None, None)
+if not ret:
+    print("Error, Camera Right Calibration")
+    exit()
+
+# Stereo Calibration
+ret, mtxL, distL, mtxR, distR, R, T, E, F = cv.stereoCalibrate(objpoints, imgpointsL, imgpointsR, mtxL, distL, mtxR, distR, (w, h))
+if not ret:
+    print("Error, Stereo Calibration")
+    exit()
+print("Calibration Matrix L")
+print(mtxL)
+print("Distortion L")
+print(distL)
+print("Calibration Matrix R")
+print(mtxR)
+print("Distortion R")
+print(distR)
+print("Rotation")
+print(R)
+print("Translation")
+print(T)
+
+print("Essential")
+print(E)
+print("Fundamental")
+print(F)
+
+RTL = np.concatenate([np.eye(3), [[0],[0],[0]]], axis=-1)
+PL = mtxL @ RTL
+RTR = np.concatenate([R, T], axis=-1)
+PR = mtxR @ RTR
+
+print("Projection Matrices")
+print(PL)
+print(PR)
+
+points4D = cv.triangulatePoints(PL, PR, imgpointsL, imgpointsR)
+
+points3D = points4D[0:3,:]/points4D[3,:]
+print("Points:")
+print(points3D.transpose())
+print("Actual")
+print(objpoints)
