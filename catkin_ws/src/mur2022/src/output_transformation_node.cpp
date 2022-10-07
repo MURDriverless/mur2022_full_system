@@ -2,7 +2,7 @@
 #include <ros/package.h>
 #include <std_msgs/Bool.h>
 #include <geometry_msgs/Twist.h>
-#include "topic_names.h"
+#include "topic_names_mur.h"
 
 // Declare "member" variables
 ros::Subscriber control_output_sub;
