@@ -105,6 +105,8 @@ else:
 objpoints = [] # 3d point in real world space
 imgpointsL = [] # 2d points in image plane.
 imgpointsR = []
+boxsizeL = []
+boxsizeR = []
 images = glob.glob("Camera Calibration GRID IMAGES/*")
 images = sorted(images)
 
@@ -131,6 +133,7 @@ for image_name in images:
         x = box[0] + box[2]/2
         y = box[1] + box[3]/2
         center.append([x, y])
+        boxsize = [box[2], box[3]]
     center = np.array(center)
     for point, cl in zip(center, classes):
         x, y = point
@@ -157,11 +160,15 @@ for image_name in images:
     if side == 'R':
         while len(imgpointsR) <= ind:
             imgpointsR.append([])
+            boxsizeR.append([])
         imgpointsR[ind] = center[0]
+        boxsizeR[ind] = boxsize
     elif side == 'L':
         while len(imgpointsL) <= ind:
             imgpointsL.append([])
+            boxsizeL.append([])
         imgpointsL[ind] = center[0]
+        boxsizeL[ind] = boxsize
     else:
         print("ERROR! Invalid file name")
         exit()
@@ -184,8 +191,11 @@ print("RealWorld")
 print(objpoints)
 print("Image Points L")
 print(imgpointsL)
+print(np.array(boxsizeL))
 print("Image Points R")
 print(imgpointsR)
+print(np.array(boxsizeR))
+
 
 w, h, c = image.shape
 

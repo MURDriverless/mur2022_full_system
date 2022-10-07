@@ -32,39 +32,7 @@ PR = np.array([[ 1.33753465e+03, -1.11813249e+02,  9.27124358e+02,  8.68619259e+
  [ 2.39852651e-02, -1.17556250e-01,  9.92776528e-01,  3.40744625e-01]])
 
 
-img_id = 2
-right_image = cv.imread("right/"  + str(img_id) + ".png")
-left_image = cv.imread("left/" + str(img_id) + ".png")
-right_image_og = right_image
-left_image_og = left_image
-right_image_gray = cv.cvtColor(right_image, cv.COLOR_RGB2GRAY)
-left_image_gray = cv.cvtColor(left_image, cv.COLOR_RGB2GRAY)
-size = left_image_gray.shape
 
-h,  w = left_image.shape[:2]
-
-
-cv.imshow("right", right_image)
-cv.waitKey(1000)
-cv.imshow("left", left_image)
-cv.waitKey(1000)
-
-confThreshold = 0.75  #Confidence threshold
-nmsThreshold = 0.5   #Non-maximum suppression threshold
-inpWidth = 832       #Width of network's input image
-inpHeight = 832      #Height of network's input image
-
-# Load names of classes
-classesFile = "cones.names"
-classes = None
-with open(classesFile, 'rt') as f:
-    classes = f.read().rstrip('\n').split('\n')
-
-# Give the configuration and weight files for the model and load the network using them.
-modelConfiguration = "yolov4-tiny-cones.cfg"
-modelWeights = "yolov4-tiny-cones_best.weights"
-
-net = cv.dnn.readNetFromDarknet(modelConfiguration, modelWeights)
 
 # Get the names of the output layers
 def getOutputsNames(net):
@@ -139,191 +107,210 @@ def postprocess(image, outs):
         drawPred(image, classIds[i], confidences[i], left, top, left + width, top + height)
     return oBoxes, oClasses
 
-# Create a 4D blob from a frame.
-blobR = cv.dnn.blobFromImage(right_image, 1/255, (inpWidth, inpHeight), [0,0,0], 1, crop=False)
-# Sets the input to the network
-net.setInput(blobR)
+for img_id in range(1, 30):
+    right_image = cv.imread("right/"  + str(img_id) + ".png")
+    left_image = cv.imread("left/" + str(img_id) + ".png")
+    right_image_og = right_image
+    left_image_og = left_image
+    right_image_gray = cv.cvtColor(right_image, cv.COLOR_RGB2GRAY)
+    left_image_gray = cv.cvtColor(left_image, cv.COLOR_RGB2GRAY)
+    size = left_image_gray.shape
 
-# Runs the forward pass to get output of the output layers
-outsR = net.forward(getOutputsNames(net))
-
-# Remove the bounding boxes with low confidence
-boxesR, classR = postprocess(right_image, outsR)
-
-# Put efficiency information. The function getPerfProfile returns the overall time for inference(t) and the timings for each of the layers(in layersTimes)
-t, _ = net.getPerfProfile()
-label = 'Inference time: %.2f ms' % (t * 1000.0 / cv.getTickFrequency())
-cv.putText(right_image, label, (0, 15), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255))
-
-# Create a 4D blob from a frame.
-blobL = cv.dnn.blobFromImage(left_image, 1/255, (inpWidth, inpHeight), [0,0,0], 1, crop=False)
-# Sets the input to the network
-net.setInput(blobL)
-
-# Runs the forward pass to get output of the output layers
-outsL = net.forward(getOutputsNames(net))
-
-# Remove the bounding boxes with low confidence
-boxesL, classL = postprocess(left_image, outsL)
-
-# Put efficiency information. The function getPerfProfile returns the overall time for inference(t) and the timings for each of the layers(in layersTimes)
-t, _ = net.getPerfProfile()
-label = 'Inference time: %.2f ms' % (t * 1000.0 / cv.getTickFrequency())
-cv.putText(left_image, label, (0, 15), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255))
+    h,  w = left_image.shape[:2]
 
 
+    cv.imshow("right", right_image)
+    cv.waitKey(1000)
+    cv.imshow("left", left_image)
+    cv.waitKey(1000)
 
-# TODO: Find Matches between found cones
-# PROBLEM: Fundamental matrix is not great - giving bad matches = poor stereo calibration
-centerL = []
-for r in range(len(boxesL)):
-    box = boxesL[r]
-    x = box[0] + box[2]/2
-    y = box[1] + box[3]/2
-    centerL.append([x, y])
-centerL = np.array(centerL)
-print(centerL)
+    confThreshold = 0.75  #Confidence threshold
+    nmsThreshold = 0.75   #Non-maximum suppression threshold
+    inpWidth = 832       #Width of network's input image
+    inpHeight = 832      #Height of network's input image
 
-centerR = []
-for r in range(len(boxesR)):
-    box = boxesR[r]
-    x = box[0] + box[2]/2
-    y = box[1] + box[3]/2
-    centerR.append([x, y])
-centerR = np.array(centerR)
-print(centerR)
-# centerL = cv.undistortImagePoints(np.array(centerL), mtxL, dstL)
-linesR = cv.computeCorrespondEpilines(centerL.reshape(-1,1,2), 1, F)
-linesL = cv.computeCorrespondEpilines(centerR.reshape(-1,1,2), 2, F)
-# for point, cl in zip(centerL, classL):
-#     x, y = point
-#     if cl == 0:
-#         color = (255, 0, 0)
-#     elif cl == 1:
-#         color = (0, 255, 0)
-#     elif cl == 2:
-#         color = (0, 255, 255)
-#     else:
-#         color = (0, 0, 0)
-#     left_image = cv.circle(left_image,(int(x),int(y)),5,color,-1)
+    # Load names of classes
+    classesFile = "cones.names"
+    classes = None
+    with open(classesFile, 'rt') as f:
+        classes = f.read().rstrip('\n').split('\n')
 
-for (r, cl) in zip(linesL, classR):
-    if cl == 0:
-        color = (255, 0, 0)
-    elif cl == 1:
-        color = (0, 255, 0)
-    elif cl == 2:
-        color = (0, 255, 255)
-    else:
-        color = (0, 0, 0)
-    r = r[0]
-    x0,y0 = map(int, [0, -r[2]/r[1] ])
-    x1,y1 = map(int, [w, -(r[2]+r[0]*w)/r[1] ])
-    left_image = cv.line(left_image, (x0,y0), (x1,y1), color,1)
+    # Give the configuration and weight files for the model and load the network using them.
+    modelConfiguration = "yolov4-tiny-cones.cfg"
+    modelWeights = "yolov4-tiny-cones_best.weights"
 
-cv.imshow("Found Cones left", left_image)
-cv.waitKey(1000)
-#  
-# for point, cl in zip(centerR, classR):
-#     x, y = point
-#     if cl == 0:
-#         color = (255, 0, 0)
-#     elif cl == 1:
-#         color = (0, 255, 0)
-#     elif cl == 2:
-#         color = (0, 255, 255)
-#     else:
-#         color = (0, 0, 0)
-#     right_image = cv.circle(right_image,(int(x),int(y)),5,color,-1)
+    net = cv.dnn.readNetFromDarknet(modelConfiguration, modelWeights)
 
-for (r, cl) in zip(linesR, classL):
-    if cl == 0:
-        color = (255, 0, 0)
-    elif cl == 1:
-        color = (0, 255, 0)
-    elif cl == 2:
-        color = (0, 255, 255)
-    else:
-        color = (0, 0, 0)
-    r = r[0]
-    x0,y0 = map(int, [0, -r[2]/r[1] ])
-    x1,y1 = map(int, [w, -(r[2]+r[0]*w)/r[1] ])
-    right_image = cv.line(right_image, (x0,y0), (x1,y1), color,1)
+    # Create a 4D blob from a frame.
+    blobR = cv.dnn.blobFromImage(right_image, 1/255, (inpWidth, inpHeight), [0,0,0], 1, crop=False)
+    # Sets the input to the network
+    net.setInput(blobR)
 
-cv.imshow("Found Cones right", right_image)
-cv.waitKey(0)
-a = 1
-# Collect all distances
-all_cost = np.ones((len(centerR), len(linesR)))*inf
-for r in range(len(centerR)):
-    for l in range(len(linesR)):
-        if classR[r] == classL[l]:
-            point = np.array([centerR[r][0], centerR[r][1], 1])
-            line = linesR[l][0]
-            line = np.array([line[0], line[1], line[2]])
-            boxL = boxesL[l]
-            boxR = boxesR[r]
-            cost = (1-a)*(abs(boxL[2] - boxR[2]) + abs(boxL[3] - boxL[3])) + a*abs(np.dot(point, line))
-            all_cost[r][l] = cost
+    # Runs the forward pass to get output of the output layers
+    outsR = net.forward(getOutputsNames(net))
 
-print(all_cost)
-# Pair up cones from left and right image based on distance
-pairs = []
-for r in range(len(centerR)):
-    for l in range(len(linesR)):
-        if min(all_cost[r, :]) == all_cost[r, l] and min(all_cost[:, l]) == all_cost[r, l]:
-            pairs.append((r, l))
+    # Remove the bounding boxes with low confidence
+    boxesR, classR = postprocess(right_image, outsR)
 
-print(pairs)
+    # Put efficiency information. The function getPerfProfile returns the overall time for inference(t) and the timings for each of the layers(in layersTimes)
+    t, _ = net.getPerfProfile()
+    label = 'Inference time: %.2f ms' % (t * 1000.0 / cv.getTickFrequency())
+    cv.putText(right_image, label, (0, 15), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255))
 
-# Select only the right points
-sortL = []
-sortR = []
-for r, l in pairs:
-    sortR.append(r)
-    sortL.append(l)
+    # Create a 4D blob from a frame.
+    blobL = cv.dnn.blobFromImage(left_image, 1/255, (inpWidth, inpHeight), [0,0,0], 1, crop=False)
+    # Sets the input to the network
+    net.setInput(blobL)
+
+    # Runs the forward pass to get output of the output layers
+    outsL = net.forward(getOutputsNames(net))
+
+    # Remove the bounding boxes with low confidence
+    boxesL, classL = postprocess(left_image, outsL)
+
+    # Put efficiency information. The function getPerfProfile returns the overall time for inference(t) and the timings for each of the layers(in layersTimes)
+    t, _ = net.getPerfProfile()
+    label = 'Inference time: %.2f ms' % (t * 1000.0 / cv.getTickFrequency())
+    cv.putText(left_image, label, (0, 15), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255))
 
 
-centerL = centerL[sortL]
-classL = np.array(classL)
-classL = classL[sortL]
-centerR = centerR[sortR]
-classR = np.array(classR)
-classR = classR[sortR]
-for pointL, pointR, cl in zip(centerL, centerR, classR):
-    xL, yL = pointL
-    xR, yR = pointR
-    if cl == 0:
-        color = (100 + randint(0, 150), 0, 0)
-    elif cl == 1:
-        color = (0, 50 + randint(0, 200), 0)
-    elif cl == 2:
-        rn = 50 + randint(0, 200)
-        color = (0, rn, rn)
-    else:
-        color = (0, 0, 0)
-    right_image = cv.circle(right_image,(int(xR),int(yR)),5,color,-1)
-    left_image = cv.circle(left_image,(int(xL),int(yL)),5,color,-1)
 
-cv.imshow("Left Image w/ matches", left_image)
-cv.waitKey(2000)
-cv.imshow("Right Image w/ matches", right_image)
-cv.waitKey(2000)
-    
-# TODO: Once Matches have been found compute cone locations
-# triangulate points
-points4D = cv.triangulatePoints(PL, PR, centerL.transpose(), centerR.transpose())
+    # TODO: Find Matches between found cones
+    # PROBLEM: Fundamental matrix is not great - giving bad matches = poor stereo calibration
+    centerL = []
+    for r in range(len(boxesL)):
+        box = boxesL[r]
+        x = box[0] + box[2]/2
+        y = box[1] + box[3]/2
+        if box[1] + box[3] == w:
+            continue
+        centerL.append([x, y])
+    centerL = np.array(centerL)
+    print(centerL)
 
-points3D = points4D[0:3,:]/points4D[3,:]
-print("Points:")
-print(points3D)
-print("Dist:")
-print(np.sqrt(points3D[0]*points3D[0] + points3D[1]*points3D[1] + points3D[2]*points3D[2]))
+    centerR = []
+    for r in range(len(boxesR)):
+        box = boxesR[r]
+        x = box[0] + box[2]/2
+        y = box[1] + box[3]/2
+        centerR.append([x, y])
+    centerR = np.array(centerR)
+    print(centerR)
+    # centerL = cv.undistortImagePoints(np.array(centerL), mtxL, dstL)
+    # for point, cl in zip(centerL, classL):
+    #     x, y = point
+    #     if cl == 0:
+    #         color = (255, 0, 0)
+    #     elif cl == 1:
+    #         color = (0, 255, 0)
+    #     elif cl == 2:
+    #         color = (0, 255, 255)
+    #     else:
+    #         color = (0, 0, 0)
+    #     left_image = cv.circle(left_image,(int(x),int(y)),5,color,-1)
 
-# f = open("cones.csv", "a")
-# for x, y, z in points3D.transpose():
-#     f.write(str(x) + "," + str(y) + "," + str(z) + "\n")
 
-# f.close()
 
-cv.waitKey(0)
+
+    #  
+    # for point, cl in zip(centerR, classR):
+    #     x, y = point
+    #     if cl == 0:
+    #         color = (255, 0, 0)
+    #     elif cl == 1:
+    #         color = (0, 255, 0)
+    #     elif cl == 2:
+    #         color = (0, 255, 255)
+    #     else:
+    #         color = (0, 0, 0)
+    #     right_image = cv.circle(right_image,(int(x),int(y)),5,color,-1)
+
+
+
+
+    # Collect all distances
+    # all_cost = np.ones((len(centerR), len(linesR)))*inf
+    # for r in range(len(centerR)):
+    #     for l in range(len(linesR)):
+    #         if classR[r] == classL[l]:
+    #             point = np.array([centerR[r][0], centerR[r][1], 1])
+    #             line = linesR[l][0]
+    #             line = np.array([line[0], line[1], line[2]])
+    #             boxL = boxesL[l]
+    #             boxR = boxesR[r]
+    #             cost = (1-a)*(abs(boxL[2] - boxR[2]) + abs(boxL[3] - boxL[3])) + a*abs(np.dot(point, line))
+    #             all_cost[r][l] = cost
+
+    all_cost = np.ones((len(centerR), len(centerL)))*inf
+    for r in range(len(centerR)):
+        for l in range(len(centerL)):
+            if classR[r] == classL[l]:
+                yR_from_L = 1.008*centerL[l][1] + 33.06
+                AreaR_from_L = 1.033*boxesL[l][2]*boxesL[l][3] - 226.1
+                # distL = 376.5*(boxesL[l][3]**-0.9404)
+                # distR = 406.8*(boxesR[r][3]**-0.9597)
+                # abs(distL - distR)
+                all_cost[r][l] =  + abs(yR_from_L - centerR[r][1])**2 + abs(AreaR_from_L - boxesR[r][2]*boxesR[r][3])
+
+
+    print(all_cost)
+    # Pair up cones from left and right image based on distance
+    pairs = []
+    for r in range(len(centerR)):
+        for l in range(len(centerL)):
+            if min(all_cost[r, :]) == all_cost[r, l] and min(all_cost[:, l]) == all_cost[r, l]:
+                pairs.append((r, l))
+
+    print(pairs)
+
+    # Select only the right points
+    sortL = []
+    sortR = []
+    for r, l in pairs:
+        sortR.append(r)
+        sortL.append(l)
+
+
+    centerL = centerL[sortL]
+    classL = np.array(classL)
+    classL = classL[sortL]
+    centerR = centerR[sortR]
+    classR = np.array(classR)
+    classR = classR[sortR]
+    for pointL, pointR, cl in zip(centerL, centerR, classR):
+        xL, yL = pointL
+        xR, yR = pointR
+        if cl == 0:
+            color = (100 + randint(0, 150), 0, 0)
+        elif cl == 1:
+            color = (0, 50 + randint(0, 200), 0)
+        elif cl == 2:
+            rn = 50 + randint(0, 200)
+            color = (0, rn, rn)
+        else:
+            color = (0, 0, 0)
+        right_image = cv.circle(right_image,(int(xR),int(yR)),5,color,-1)
+        left_image = cv.circle(left_image,(int(xL),int(yL)),5,color,-1)
+
+    cv.imshow("Left Image w/ matches", left_image)
+    cv.waitKey(2000)
+    cv.imshow("Right Image w/ matches", right_image)
+    cv.waitKey(2000)
+        
+    # TODO: Once Matches have been found compute cone locations
+    # triangulate points
+    points4D = cv.triangulatePoints(PL, PR, centerL.transpose(), centerR.transpose())
+
+    points3D = points4D[0:3,:]/points4D[3,:]
+    print("Points:")
+    print(points3D)
+    print("Dist:")
+    print(np.sqrt(points3D[0]*points3D[0] + points3D[1]*points3D[1] + points3D[2]*points3D[2]))
+
+    # f = open("cones.csv", "a")
+    # for x, y, z in points3D.transpose():
+    #     f.write(str(x) + "," + str(y) + "," + str(z) + "\n")
+
+    # f.close()
+
+    cv.waitKey(0)
