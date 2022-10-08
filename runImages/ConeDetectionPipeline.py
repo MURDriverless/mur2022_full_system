@@ -245,12 +245,16 @@ for img_id in range(1, 30):
     for r in range(len(centerR)):
         for l in range(len(centerL)):
             if classR[r] == classL[l]:
-                yR_from_L = 1.008*centerL[l][1] + 33.06
-                AreaR_from_L = 1.033*boxesL[l][2]*boxesL[l][3] - 226.1
+                # yR_from_L = 1.008*centerL[l][1] + 33.06
+                # AreaR_from_L = 1.033*boxesL[l][2]*boxesL[l][3] - 226.1
                 # distL = 376.5*(boxesL[l][3]**-0.9404)
                 # distR = 406.8*(boxesR[r][3]**-0.9597)
                 # abs(distL - distR)
-                all_cost[r][l] =  + abs(yR_from_L - centerR[r][1])**2 + abs(AreaR_from_L - boxesR[r][2]*boxesR[r][3])
+                xRfL = 115.7 + 0.9977*centerL[l][0] - 0.3607*centerL[l][1]
+                yRfL = 38.3  - 0.005147*centerL[l][0] + 1.008*centerL[l][1]
+                right_image = cv.circle(right_image,(int(xRfL),int(yRfL)),3,(0,0,0),-1)
+                cost = 
+                all_cost[r][l] =  cost
 
 
     print(all_cost)
@@ -277,6 +281,7 @@ for img_id in range(1, 30):
     centerR = centerR[sortR]
     classR = np.array(classR)
     classR = classR[sortR]
+    print(classR)
     for pointL, pointR, cl in zip(centerL, centerR, classR):
         xL, yL = pointL
         xR, yR = pointR
