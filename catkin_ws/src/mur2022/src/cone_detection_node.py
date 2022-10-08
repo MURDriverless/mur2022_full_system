@@ -67,10 +67,12 @@ class Cone:
 
 class ConeDetector:
     def __init__(self):
-
-        self.cone_pub = rospy.Publisher(DETECTED_CONE_TOPIC, found_cone_msg, queue_size=20)
         rospy.init_node('cone_detection_node')
 
+        self.verbose = rospy.get_param('verbose', False)
+
+        self.cone_pub = rospy.Publisher(DETECTED_CONE_TOPIC, found_cone_msg, queue_size=20)
+        
         self.r_sub = rospy.Subscriber(RIGHT_CAMERA_TOPIC, Image, self.rightInput)
         self.l_sub = rospy.Subscriber(LEFT_CAMERA_TOPIC, Image, self.leftInput)
         self.cone_pub = rospy.Publisher(DETECTED_CONE_TOPIC, found_cone_msg, queue_size=20)
@@ -84,7 +86,7 @@ class ConeDetector:
         self.current_right = None
 
         self.cv_bridge = CvBridge()
-
+    
         self.net = cv.dnn.readNetFromDarknet(MODEL_CONFIG, MODEL_WEIGHTS)
 
         self.classes = None
@@ -133,7 +135,7 @@ class ConeDetector:
 
     def detectCones(self):
         if self.have_left and self.have_right:
-            found_cones = self.runAlgorithm()
+            found_cones = self.runAlgorithm(self.verbose)
             
             for cone in found_cones:
                 self.publishCone(cone)
