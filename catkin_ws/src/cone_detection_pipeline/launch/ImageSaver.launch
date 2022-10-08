@@ -1,0 +1,3 @@
+<launch>   
+    <node pkg="cone_detection_pipeline" type="ImageSaver.py" name="ImageSaver" output="screen"></node>
+</launch>
