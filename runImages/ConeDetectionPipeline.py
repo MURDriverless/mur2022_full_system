@@ -119,10 +119,10 @@ for img_id in range(1, 30):
     h,  w = left_image.shape[:2]
 
 
-    cv.imshow("right", right_image)
-    cv.waitKey(1000)
-    cv.imshow("left", left_image)
-    cv.waitKey(1000)
+    # cv.imshow("right", right_image)
+    # cv.waitKey(1000)
+    # cv.imshow("left", left_image)
+    # cv.waitKey(1000)
 
     confThreshold = 0.75  #Confidence threshold
     nmsThreshold = 0.75   #Non-maximum suppression threshold
@@ -178,23 +178,39 @@ for img_id in range(1, 30):
     # TODO: Find Matches between found cones
     # PROBLEM: Fundamental matrix is not great - giving bad matches = poor stereo calibration
     centerL = []
-    for r in range(len(boxesL)):
-        box = boxesL[r]
+    classLnew = []
+    for l in range(len(boxesL)):
+        box = boxesL[l]
         x = box[0] + box[2]/2
         y = box[1] + box[3]/2
-        if box[1] + box[3] == w:
-            continue
-        centerL.append([x, y])
+        if y > 600:
+            try:
+                ind = centerL.index([x, y])
+            except ValueError:
+                centerL.append([x, y])
+                classLnew.append(classL[l])
+        else:
+            print("Not Added!")
     centerL = np.array(centerL)
+    classL = classLnew
     print(centerL)
 
     centerR = []
+    classRnew = []
     for r in range(len(boxesR)):
         box = boxesR[r]
         x = box[0] + box[2]/2
         y = box[1] + box[3]/2
-        centerR.append([x, y])
+        if y > 600:
+            try:
+                ind = centerR.index([x, y])
+            except ValueError:
+                centerR.append([x, y])
+                classRnew.append(classR[r])
+        else:
+            print("Not Added!")
     centerR = np.array(centerR)
+    classR = classRnew
     print(centerR)
     # centerL = cv.undistortImagePoints(np.array(centerL), mtxL, dstL)
     # for point, cl in zip(centerL, classL):
@@ -240,6 +256,20 @@ for img_id in range(1, 30):
     #             boxR = boxesR[r]
     #             cost = (1-a)*(abs(boxL[2] - boxR[2]) + abs(boxL[3] - boxL[3])) + a*abs(np.dot(point, line))
     #             all_cost[r][l] = cost
+    def world_from_L(u, v):
+        u = (u - 1030)/452.9
+        v = (v - 725.9)/76.41
+        y = -0.06899 - 1.705*u + 0.09506*v + 0.06137*u**2 + 0.7549*u*v - 0.05601*v**2 + 0.01561*u**3 - 0.05147*v*(u**2) - 0.1594*u*(v**2) + 0.01651*v**3
+        x = 4.861 - 0.2278*u - 2.396*v - 0.05831*u**2 + 0.1824*u*v + 0.9738*v**2 + 0.01231*u**3 + 0.02113*v*(u**2) - 0.05309*u*(v**2) - 0.1779*v**3
+        return x, y
+    
+    
+    def world_from_R(u, v):
+        u = (u - 881.8)/452.7
+        v = (v - 764.5)/77.06
+        y = -0.04364 -1.71*u -0.006886*v + 0.06176*u**2 + 0.7675*u*v -0.01835*v**2 + 0.0171*u**3 -0.04484*v*(u**2) -0.1662*u*(v**2) + 0.007698*v**3
+        x = 4.835 -0.292*u -2.424*v -0.05401*u**2 + 0.1824*u*v + 1.043*v**2 + 0.007452*u**3 + 0.03166*v*(u**2) -0.04845*u*(v**2)  -0.201*v**3
+        return x, y
 
     all_cost = np.ones((len(centerR), len(centerL)))*inf
     for r in range(len(centerR)):
@@ -250,14 +280,20 @@ for img_id in range(1, 30):
                 # distL = 376.5*(boxesL[l][3]**-0.9404)
                 # distR = 406.8*(boxesR[r][3]**-0.9597)
                 # abs(distL - distR)
-                xRfL = 115.7 + 0.9977*centerL[l][0] - 0.3607*centerL[l][1]
-                yRfL = 38.3  - 0.005147*centerL[l][0] + 1.008*centerL[l][1]
-                right_image = cv.circle(right_image,(int(xRfL),int(yRfL)),3,(0,0,0),-1)
-                cost = 
+                # xRfL = 115.7 + 0.9977*centerL[l][0] - 0.3607*centerL[l][1]
+                # yRfL = 38.3  - 0.005147*centerL[l][0] + 1.008*centerL[l][1]
+                # right_image = cv.circle(right_image,(int(xRfL),int(yRfL)),3,(0,0,0),-1)
+                xL, yL = world_from_L(centerL[l][0], centerL[l][1])
+                xR, yR = world_from_R(centerR[r][0], centerR[r][1])
+                if abs(yL - yR) > 0.7:
+                    cost = 100
+                else:
+                    # cost = np.sqrt(abs(xL - xR)**2 + abs(yL - yR)**2)
+                    cost = abs(xL - xR) + 4*abs(yL - yR)
                 all_cost[r][l] =  cost
 
 
-    print(all_cost)
+    print(np.round(all_cost, 3))
     # Pair up cones from left and right image based on distance
     pairs = []
     for r in range(len(centerR)):
@@ -282,7 +318,7 @@ for img_id in range(1, 30):
     classR = np.array(classR)
     classR = classR[sortR]
     print(classR)
-    for pointL, pointR, cl in zip(centerL, centerR, classR):
+    for pointL, pointR, cl, pair in zip(centerL, centerR, classR, pairs):
         xL, yL = pointL
         xR, yR = pointR
         if cl == 0:
@@ -295,22 +331,41 @@ for img_id in range(1, 30):
         else:
             color = (0, 0, 0)
         right_image = cv.circle(right_image,(int(xR),int(yR)),5,color,-1)
+        cv.putText(right_image,str(pair[0]) + "," + str(pair[1]), (int(xR),int(yR)), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255))
         left_image = cv.circle(left_image,(int(xL),int(yL)),5,color,-1)
+        cv.putText(left_image,str(pair[0]) + "," + str(pair[1]), (int(xL),int(yL)), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255))
 
+    left_image = cv.resize(left_image, (int(w/2),int(h/2)))
     cv.imshow("Left Image w/ matches", left_image)
     cv.waitKey(2000)
+    right_image = cv.resize(right_image, (int(w/2),int(h/2)))
     cv.imshow("Right Image w/ matches", right_image)
     cv.waitKey(2000)
         
     # TODO: Once Matches have been found compute cone locations
     # triangulate points
-    points4D = cv.triangulatePoints(PL, PR, centerL.transpose(), centerR.transpose())
+    # points4D = cv.triangulatePoints(PL, PR, centerL.transpose(), centerR.transpose())
 
-    points3D = points4D[0:3,:]/points4D[3,:]
-    print("Points:")
-    print(points3D)
-    print("Dist:")
-    print(np.sqrt(points3D[0]*points3D[0] + points3D[1]*points3D[1] + points3D[2]*points3D[2]))
+    # points3D = points4D[0:3,:]/points4D[3,:]
+    # print("Points:")
+    # print(points3D)
+    # print("Dist:")
+    # print(np.sqrt(points3D[0]*points3D[0] + points3D[1]*points3D[1] + points3D[2]*points3D[2]))
+
+    # Using mapping 
+    points = []
+    for i in range(len(centerL)):
+        xL, yL = world_from_L(centerL[i][0], centerL[i][1])
+        xR, yR = world_from_R(centerR[i][0], centerR[i][1])
+        x = (xL + xR)/2
+        y = (yL + yR)/2
+        print(pairs[i])
+        print(xL, yL)
+        print(xR, yR)
+        print(x, y)
+        points.append([x, y])
+    
+    
 
     # f = open("cones.csv", "a")
     # for x, y, z in points3D.transpose():
@@ -318,4 +373,4 @@ for img_id in range(1, 30):
 
     # f.close()
 
-    cv.waitKey(0)
+ 
