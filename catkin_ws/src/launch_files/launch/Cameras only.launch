@@ -1,0 +1,3 @@
+<launch> 
+   <include file="$(find pylon_camera))/launch/pylon_camera_both.launch"/>
+</launch>
