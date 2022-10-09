@@ -41,8 +41,8 @@ def getOutputsNames(net):
     # Get the names of the output layers, i.e. the layers with unconnected outputs
     check = net.getUnconnectedOutLayers().tolist()
     # If error switch line
-    return [layersNames[i - 1] for i in check]
-    # return [layersNames[i[0] - 1] for i in check]
+    # return [layersNames[i - 1] for i in check]
+    return [layersNames[i[0] - 1] for i in check]
 
 # Draw the predicted bounding box
 def drawPred(image, classId, conf, left, top, right, bottom):
@@ -96,7 +96,7 @@ def postprocess(image, outs):
     oClasses = []
     for i in indices:
         # If error uncomment below
-        # i = i[0]
+        i = i[0]
         box = boxes[i]
         oBoxes.append(box)
         oClasses.append(classIds[i])
