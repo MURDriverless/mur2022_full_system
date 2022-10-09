@@ -15,4 +15,5 @@
 #define CONTROL_TRANSITION_TOPIC "/mur/control/transition"
 #define CONTROL_OUTPUT_TOPIC "/husky_velocity_control/cmd_vel"
 
+#define CONES_RVIZ_TOPIC "/rviz_cones"
 #endif

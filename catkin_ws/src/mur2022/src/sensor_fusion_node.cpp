@@ -6,6 +6,7 @@
 #include "std_msgs/Bool.h"
 #include "geometry_msgs/Point.h"
 #include "tf/transform_listener.h"
+#include "visualization_msgs/MarkerArray.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,13 +21,14 @@
 
 // Declare "member" variables
 ros::Publisher full_cones_pub;
+ros::Publisher full_cones_rviz_pub;
 ros::Subscriber cones_found_sub;
-// ros::Subscriber pose_sub;
-
 
 std::vector<float> cones_x;
 std::vector<float> cones_y;
 std::vector<std::string> colour;
+
+bool rviz;
 
 // Checks if the new cone has already been found
 static bool needToAdd(float x, float y);
@@ -36,6 +38,7 @@ static geometry_msgs::Point getConeGlobalPosition(geometry_msgs::PointStamped lo
 
 // Publish vectors of cones
 static void publishCones(void);
+static void publishConeToRviz(int x, int y, std::string colour);
 
 // Callback for new cones found location;
 void foundCones(const mur2022::found_cone_msg& msg);
@@ -46,7 +49,10 @@ int main(int argc, char* argv[]) {
   
   ros::NodeHandle nh("~");
 
+  rviz = nh.param("use_rviz", false);
+
   full_cones_pub = nh.advertise<mur_common::cone_msg>(CONES_FULL_TOPIC, 1, false);
+  full_cones_rviz_pub = nh.advertise<visualization_msgs::MarkerArray>(CONES_RVIZ_TOPIC, 1, false);
 
   cones_found_sub = nh.subscribe(CONE_DETECTED_TOPIC, 1, foundCones);
 
@@ -63,7 +69,11 @@ void foundCones(const mur2022::found_cone_msg& msg) {
 		cones_y.push_back(global_point.y);
 		
     colour.push_back(msg.colour);
+
 		publishCones();
+    if(rviz) {
+      publishConeToRviz(global_point.x, global_point.y, msg.colour);
+    }
 	} else {
 		std::cout << "Cone found at: (" << global_point.x << ", " << global_point.y << ") too close to another cone.";
 	}
@@ -101,4 +111,51 @@ static void publishCones(void) {
   cones.colour = colour;
 
   full_cones_pub.publish(cones);
+}
+
+static void publishConeToRviz(int x, int y, std::string colour) {
+  visualization_msgs::Marker marker;
+
+  marker.header.frame_id = "/map";
+  marker.header.stamp = ros::Time::now();
+
+  marker.type = visualization_msgs::Marker::CYLINDER;
+  marker.action = visualization_msgs::Marker::ADD;
+
+  marker.pose.position.x = x;
+  marker.pose.position.y = y;
+  marker.pose.position.z = 0;
+
+  marker.pose.orientation.x = 0.0;
+  marker.pose.orientation.y = 0.0;
+  marker.pose.orientation.z = 0.0;
+  marker.pose.orientation.w = 1.0;
+
+  marker.scale.x = 0.25;
+  marker.scale.y = 0.25;
+  marker.scale.z = 0.5;
+
+  if(colour.compare("blue")) {
+    marker.color.a = 1.0; // Don't forget to set the alpha!
+    marker.color.r = 0.0;
+    marker.color.g = 0.0;
+    marker.color.b = 1.0;
+  } else if(colour.compare("yellow")) {
+    marker.color.a = 1.0; // Don't forget to set the alpha!
+    marker.color.r = 1.0;
+    marker.color.g = 1.0;
+    marker.color.b = 0.0;
+  } else if(colour.compare("orange")) {
+    marker.color.a = 1.0; // Don't forget to set the alpha!
+    marker.color.r = 1.0;
+    marker.color.g = 0.65;
+    marker.color.b = 0.0;
+  } else { // unknown = white
+    marker.color.a = 1.0; // Don't forget to set the alpha!
+    marker.color.r = 1.0;
+    marker.color.g = 1.0;
+    marker.color.b = 1.0;
+  }
+
+  full_cones_rviz_pub.publish(marker);
 }
