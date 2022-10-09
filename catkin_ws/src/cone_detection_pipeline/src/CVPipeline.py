@@ -16,8 +16,8 @@ GPU = True
 
 confThreshold = 0.5  #Confidence threshold
 nmsThreshold = 0.4   #Non-maximum suppression threshold
-inpWidth = 416       #Width of network's input image
-inpHeight = 416      #Height of network's input image
+inpWidth = 832       #Width of network's input image
+inpHeight = 832      #Height of network's input image
 
 class CVPipeline:
     def __init__(self):

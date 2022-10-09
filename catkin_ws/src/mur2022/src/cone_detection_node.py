@@ -108,7 +108,7 @@ class ConeDetector:
 
     def rightInput(self, msg):
         if not self.have_right:
-            img = cv.cvtColor(self.cv_bridge.imgmsg_to_cv2(msg), cv.COLOR_BGR2RGB)
+            img = self.cv_bridge.imgmsg_to_cv2(msg, cv.COLOR_BGR2RGB)
 
             self.current_right = img
 
@@ -118,7 +118,7 @@ class ConeDetector:
     
     def leftInput(self, msg):
         if not self.have_left:
-            img = cv.cvtColor(self.cv_bridge.imgmsg_to_cv2(msg), cv.COLOR_BGR2RGB)
+            img = self.cv_bridge.imgmsg_to_cv2(msg)
 
             self.current_left = img
 
