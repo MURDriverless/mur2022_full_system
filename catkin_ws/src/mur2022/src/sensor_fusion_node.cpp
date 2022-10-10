@@ -14,11 +14,21 @@
 #include <vector>
 
 #include "topic_names.h"
+#include "reference_frames.h"
+
 #include "mur_common/cone_msg.h" 
 #include "mur2022/found_cone_msg.h"
 
-#define CONES_DIST_THRESHOLD 1.5
-#define LOOK_AHEAD_DIST 6.0
+#define CONES_DIST_THRESHOLD 1.0f
+#define LOOK_AHEAD_DIST 8.5f
+
+#define ORANGE_START_X 0.0f
+#define ORANGE_START_LEFT 1.5f
+#define ORANCE_START_RIGHT -1.5f
+
+#define ORANGE "orange"
+#define BLUE "blue"
+#define YELLOW "yellow"
 
 class SensorFusionNode {
   public:
@@ -28,6 +38,7 @@ class SensorFusionNode {
     ros::Publisher full_cones_pub;
     ros::Publisher full_cones_rviz_pub;
     ros::Subscriber cones_found_sub;
+    ros::Subscriber start_run_sub;
 
     tf::TransformListener* listener;
 
@@ -52,6 +63,7 @@ class SensorFusionNode {
   
     // Callback for new cones found location;
     void foundCones(const mur2022::found_cone_msg& msg);
+    void startSystem(const std_msgs::Bool& msg);
 
     SensorFusionNode(ros::NodeHandle nh, bool use_rviz, bool use_verbose) {
       this->rviz = use_rviz;
@@ -60,8 +72,8 @@ class SensorFusionNode {
       this->full_cones_pub = nh.advertise<mur_common::cone_msg>(CONES_FULL_TOPIC, 1, false);
       this->full_cones_rviz_pub = nh.advertise<visualization_msgs::MarkerArray>(CONES_RVIZ_TOPIC, 1, false);
 
-      this->cones_found_sub = nh.subscribe(CONE_DETECTED_TOPIC, 1, &SensorFusionNode::foundCones, this);
-
+      this->cones_found_sub = nh.subscribe(CONE_DETECTED_TOPIC, 10, &SensorFusionNode::foundCones, this);
+      this->start_run_sub = nh.subscribe(SYSTEM_START_TOPIC, 1, &SensorFusionNode::startSystem, this); 
       this->listener = new tf::TransformListener();
     }
 };
@@ -92,6 +104,26 @@ int main(int argc, char* argv[]) {
   return 0;
 }
 
+void SensorFusionNode::startSystem(const std_msgs::Bool& msg) {
+  if(msg.data) {
+    cones_x.push_back(ORANGE_START_X);
+    cones_y.push_back(ORANGE_START_LEFT);
+    colour.push_back(ORANGE);
+    publishConesToRviz(ORANGE_START_X, ORANGE_START_LEFT, ORANGE);
+
+    cones_x.push_back(ORANGE_START_X);
+    cones_y.push_back(ORANCE_START_RIGHT);
+    colour.push_back(ORANGE);
+
+    publishCones();
+    publishConesToRviz(ORANGE_START_X, ORANCE_START_RIGHT, ORANGE);
+
+    if(this->verbose) {
+      std::cout << "Published the initial orange cones." << std::endl;
+    }
+  }
+}
+
 void SensorFusionNode::foundCones(const mur2022::found_cone_msg& msg) {
   if(msg.point.point.x > LOOK_AHEAD_DIST) {
     if(this->verbose) {
@@ -99,7 +131,6 @@ void SensorFusionNode::foundCones(const mur2022::found_cone_msg& msg) {
     }
     return;
   }
-  
   
   geometry_msgs::Point global_point = getConeGlobalPosition(msg.point);
 	
@@ -143,7 +174,7 @@ void SensorFusionNode::publishCones(void) {
   ros::Time current_time = ros::Time::now();
   
   mur_common::cone_msg cones;
-  cones.header.frame_id = "/map";
+  cones.header.frame_id = GLOBAL_FRAME;
   cones.header.stamp = current_time;
 
   cones.x = cones_x;
@@ -155,11 +186,14 @@ void SensorFusionNode::publishCones(void) {
 
 void SensorFusionNode::addMarkerToArray(float x, float y, std::string colour) {
   int index = cones_x.size() - 1;
-  std::cout << "Index: " << index << std::endl;
+
+  if(this->verbose) {
+    std::cout << "Index: " << index << std::endl;
+  }
 
   visualization_msgs::Marker marker;
 
-  marker.header.frame_id = "/map";
+  marker.header.frame_id = GLOBAL_FRAME;
   marker.header.stamp = ros::Time::now();
   marker.id = index;
 
@@ -179,17 +213,17 @@ void SensorFusionNode::addMarkerToArray(float x, float y, std::string colour) {
   marker.scale.y = 0.25;
   marker.scale.z = 0.5;
 
-  if(colour.compare("blue") == 0) {
+  if(colour.compare(BLUE) == 0) {
     marker.color.a = 1.0; // Don't forget to set the alpha!
     marker.color.r = 0.0;
     marker.color.g = 0.0;
     marker.color.b = 1.0;
-  } else if(colour.compare("yellow") == 0) {
+  } else if(colour.compare(YELLOW) == 0) {
     marker.color.a = 1.0; // Don't forget to set the alpha!
     marker.color.r = 1.0;
     marker.color.g = 1.0;
     marker.color.b = 0.0;
-  } else if(colour.compare("orange") == 0) {
+  } else if(colour.compare(ORANGE) == 0) {
     marker.color.a = 1.0; // Don't forget to set the alpha!
     marker.color.r = 1.0;
     marker.color.g = 0.65;
