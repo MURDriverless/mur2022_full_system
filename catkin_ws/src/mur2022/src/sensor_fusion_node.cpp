@@ -17,8 +17,8 @@
 #include "mur_common/cone_msg.h" 
 #include "mur2022/found_cone_msg.h"
 
-#define CONES_DIST_THRESHOLD 1.5
-#define LOOK_AHEAD_DIST 5.0
+#define CONES_DIST_THRESHOLD 1.0
+#define LOOK_AHEAD_DIST 8.5
 
 class SensorFusionNode {
   public:
@@ -35,6 +35,7 @@ class SensorFusionNode {
     std::vector<float> cones_y;
     std::vector<std::string> colour;
 
+    bool verbose;
     bool rviz;
     std::vector<visualization_msgs::Marker> cones_viz_array;
 
@@ -52,8 +53,9 @@ class SensorFusionNode {
     // Callback for new cones found location;
     void foundCones(const mur2022::found_cone_msg& msg);
 
-    SensorFusionNode(ros::NodeHandle nh, bool use_rviz) {
+    SensorFusionNode(ros::NodeHandle nh, bool use_rviz, bool use_verbose) {
       this->rviz = use_rviz;
+      this->verbose = use_verbose;
 
       this->full_cones_pub = nh.advertise<mur_common::cone_msg>(CONES_FULL_TOPIC, 1, false);
       this->full_cones_rviz_pub = nh.advertise<visualization_msgs::MarkerArray>(CONES_RVIZ_TOPIC, 1, false);
@@ -83,7 +85,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Running without rviz" << std::endl;
   } 
 
-  SensorFusionNode sensorFN = SensorFusionNode(nh, use_rviz);
+  SensorFusionNode sensorFN = SensorFusionNode(nh, use_rviz, use_verbose);
 
   ros::spin();
   
@@ -91,8 +93,8 @@ int main(int argc, char* argv[]) {
 }
 
 void SensorFusionNode::foundCones(const mur2022::found_cone_msg& msg) {
-  if(msg.point.x > LOOK_AHEAD_DIST) {
-    if(this.verbose) {
+  if(msg.point.point.x > LOOK_AHEAD_DIST) {
+    if(this->verbose) {
       std::cout << "Cone found is too far ahead." << std::endl;
     }
     return;
@@ -112,7 +114,7 @@ void SensorFusionNode::foundCones(const mur2022::found_cone_msg& msg) {
       publishConesToRviz(global_point.x, global_point.y, msg.colour);
     }
 	} else {
-    if(this.verbose) {
+    if(this->verbose) {
       std::cout << "Cone found at: (" << global_point.x << ", " << global_point.y << ") too close to another cone." << std::endl;
     }		
 	}
@@ -121,7 +123,7 @@ void SensorFusionNode::foundCones(const mur2022::found_cone_msg& msg) {
 geometry_msgs::Point SensorFusionNode::getConeGlobalPosition(geometry_msgs::PointStamped local_point) {
   
   geometry_msgs::PointStamped global_point;
-  listener->waitForTransform("/map", local_point.header.frame_id, local_point.header.stamp, ros::Duration(0.2));
+  listener->waitForTransform("/map", local_point.header.frame_id, local_point.header.stamp, ros::Duration(1.0));
   listener->transformPoint("/map", local_point, global_point);
 
   return global_point.point;
