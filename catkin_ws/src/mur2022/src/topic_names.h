@@ -1,6 +1,6 @@
 
-#ifndef TOPIC_NAMES
-#define TOPIC_NAMES
+#ifndef TOPIC_NAMES_MUR
+#define TOPIC_NAMES_MUR
 
 #define LEFT_IMAGE_TOPIC "/left_image_raw" 
 #define RIGHT_IMAGE_TOPIC "/right_image_raw"
@@ -15,5 +15,6 @@
 #define CONTROL_TRANSITION_TOPIC "/mur/control/transition"
 #define CONTROL_OUTPUT_TOPIC "/husky_velocity_control/cmd_vel"
 
+#define SYSTEM_START_TOPIC "/mur_start_system"
 #define CONES_RVIZ_TOPIC "/rviz_cones"
 #endif

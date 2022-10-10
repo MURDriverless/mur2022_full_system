@@ -21,9 +21,9 @@ DETECTED_CONE_TOPIC = "/stereo_cones"
 
 CONE_DETECTION_FRAME = "/husky"
 
-CLASS_FILE = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/cones.names"
-MODEL_CONFIG = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones.cfg"
-MODEL_WEIGHTS = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones_best.weights"
+CLASS_FILE = "/home/micah/Documents/mur2022_full_system/runImages/cones.names"
+MODEL_CONFIG = "/home/micah/Documents/mur2022_full_system/runImages/yolov4-tiny-cones.cfg"
+MODEL_WEIGHTS = "/home/micah/Documents/mur2022_full_system/runImages/yolov4-tiny-cones_best.weights"
 
 GPU = cv.cuda.getCudaEnabledDeviceCount()
 
@@ -70,7 +70,8 @@ class ConeDetector:
     def __init__(self):
         rospy.init_node('cone_detection_node')
 
-        self.verbose = rospy.get_param('_verbose', True)
+        # self.verbose = rospy.get_param('_verbose', True)
+        self.verbose = False
 
         self.cone_pub = rospy.Publisher(DETECTED_CONE_TOPIC, found_cone_msg, queue_size=20)
         
@@ -108,21 +109,21 @@ class ConeDetector:
 
     def rightInput(self, msg):
         if not self.have_right:
-            img = self.cv_bridge.imgmsg_to_cv2(msg)
+            img = self.cv_bridge.imgmsg_to_cv2(msg, "bgr8")
 
             self.current_right = img
-
-            print('Got right image')
+            if self.verbose:
+                print('Got right image')
 
             self.have_right = True
     
     def leftInput(self, msg):
         if not self.have_left:
-            img = self.cv_bridge.imgmsg_to_cv2(msg)
+            img = self.cv_bridge.imgmsg_to_cv2(msg, "bgr8")
 
             self.current_left = img
-
-            print('Got left image')
+            if self.verbose:
+                print('Got left image')
 
             self.have_left = True
 
@@ -137,16 +138,19 @@ class ConeDetector:
         
         cone_msg.point.point.x = cone.x
         cone_msg.point.point.y = cone.y
-        cone_msg.point.point.z = cone.z
+        # cone_msg.point.point.z = cone.z
+        cone_msg.point.point.z = 0
 
         self.cone_pub.publish(cone_msg)
         
         self.detected_cones += 1
 
     def detectCones(self):
-        print('Checking if images saved...')
+        if self.verbose:
+            print('Checking if images saved...')
         if self.have_left and self.have_right:
-            print('Have them, running algorithm')
+            if self.verbose:
+                print('Have them, running algorithm')
             found_cones = self.runAlgorithm(self.verbose)
             print('No. Cones Found: ', len(found_cones))
 
@@ -156,14 +160,15 @@ class ConeDetector:
             self.have_left = False
             self.have_right = False
         else:
-            print('Dont, skipping')
+            if self.verbose:
+                print('No Images, skipping')
 
     def runAlgorithm(self, verbose=True):
         # if (self.current_left == None) or (self.current_right == None):
         #     print('Images still none')
         #     return False
         
-        # Save the image pair as a local variable, convert into grayscale
+        # Save the image pair as a local variable
         right_image = self.current_right
         left_image = self.current_left
 
@@ -181,42 +186,37 @@ class ConeDetector:
             cv.waitKey(1000)
             cv.destroyAllWindows()
         
-        net = cv.dnn.readNetFromDarknet(MODEL_CONFIG, MODEL_WEIGHTS)
 
         # Create a 4D blob from a frame.
-        blobR = cv.dnn.blobFromImage(right_image, 1/255, (INPUT_WIDTH, INPUT_HEIGHT), [0,0,0], 1, crop=False)
+        blobR = cv.dnn.blobFromImage(right_image, 1/255.0, (INPUT_WIDTH, INPUT_HEIGHT), [0,0,0], 1, crop=False)
         # Sets the input to the network
-        net.setInput(blobR)
+        self.net.setInput(blobR)
 
         # Runs the forward pass to get output of the output layers
-        outsR = net.forward(self.getOutputsNames(net))
-
-        print(outsR)
+        outsR = self.net.forward(self.getOutputsNames())
 
         # Remove the bounding boxes with low confidence
         boxesR, classR = self.postprocess(right_image, outsR)
-
-        print(boxesR)
         if verbose:
             # Put efficiency information. The function getPerfProfile returns the overall time for inference(t) and the timings for each of the layers(in layersTimes)
-            t, _ = net.getPerfProfile()
+            t, _ = self.net.getPerfProfile()
             label = 'Inference time: %.2f ms' % (t * 1000.0 / cv.getTickFrequency())
             cv.putText(right_image, label, (0, 15), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255))
 
         # Create a 4D blob from a frame.
-        blobL = cv.dnn.blobFromImage(left_image, 1/255, (INPUT_WIDTH, INPUT_HEIGHT), [0,0,0], 1, crop=False)
+        blobL = cv.dnn.blobFromImage(left_image, 1/255.0, (INPUT_WIDTH, INPUT_HEIGHT), [0,0,0], 1, crop=False)
         # Sets the input to the network
-        net.setInput(blobL)
+        self.net.setInput(blobL)
 
         # Runs the forward pass to get output of the output layers
-        outsL = net.forward(self.getOutputsNames(net))
+        outsL = self.net.forward(self.getOutputsNames())
 
         # Remove the bounding boxes with low confidence
         boxesL, classL = self.postprocess(left_image, outsL)
 
         if verbose:
             # Put efficiency information. The function getPerfProfile returns the overall time for inference(t) and the timings for each of the layers(in layersTimes)
-            t, _ = net.getPerfProfile()
+            t, _ = self.net.getPerfProfile()
             label = 'Inference time: %.2f ms' % (t * 1000.0 / cv.getTickFrequency())
             cv.putText(left_image, label, (0, 15), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255))
         
@@ -341,6 +341,9 @@ class ConeDetector:
             x = (xL + xR)/2
             y = (yL + yR)/2
             
+            if not self.valid_cone(x, y):
+                continue
+
             if classL[i] == classR[i]:
                 color = self.classes[classL[i]]
             else:
@@ -370,6 +373,22 @@ class ConeDetector:
         x = 4.835 -0.292*u -2.424*v -0.05401*u**2 + 0.1824*u*v + 1.043*v**2 + 0.007452*u**3 + 0.03166*v*(u**2) -0.04845*u*(v**2)  -0.201*v**3
         return x, y
 
+    def valid_cone(self, x, y):
+        if x < 1.5:
+            print("x < 1.5")
+            return False
+        if x < 3 and abs(y) > 1.5:
+            print("x < 3 and abs(y) > 1.5")
+            return False
+        if x < 4 and abs(y) > 2.5:
+            print("x < 4 and abs(y) > 2.5")
+            return False
+        if abs(y) > 3.5:
+            print("abs(y) > 3.5")
+            return False
+        return True
+
+
     def drawPred(self, image, classId, conf, left, top, right, bottom):
         # Draw a bounding box.
         cv.rectangle(image, (left, top), (right, bottom), (255, 178, 50), 3)
@@ -384,7 +403,7 @@ class ConeDetector:
         #Display the label at the top of the bounding box
         labelSize, baseLine = cv.getTextSize(label, cv.FONT_HERSHEY_SIMPLEX, 0.5, 1)
         top = max(top, labelSize[1])
-        cv.rectangle(image, (left, top - round(1.5*labelSize[1])), (left + round(1.5*labelSize[0]), top + baseLine), (255, 255, 255), cv.FILLED)
+        cv.rectangle(image, (left, int(top - round(1.5*labelSize[1]))), (int(left + round(1.5*labelSize[0])), top + baseLine), (255, 255, 255), cv.FILLED)
         cv.putText(image, label, (left, top), cv.FONT_HERSHEY_SIMPLEX, 0.75, (0,0,0), 1)
 
     def postprocess(self, image, outs):
@@ -396,19 +415,11 @@ class ConeDetector:
         classIds = []
         confidences = []
         boxes = []
-        i = 0 
         for out in outs:
-            print('Out :', out)
             for detection in out:
                 scores = detection[5:]
                 classId = np.argmax(scores)
                 confidence = scores[classId]
-                if confidence > 0.75:
-                    print('I:', i)
-                    print('Detection: ', detection)
-                    print('Scores: ', scores)
-                    print('Confidence:', confidence)
-                i += 1
                 if confidence > CONFIDENCE_THRESH:
                     center_x = int(detection[0] * imageWidth)
                     center_y = int(detection[1] * imageHeight)
@@ -420,7 +431,6 @@ class ConeDetector:
                     classIds.append(classId)
                     confidences.append(float(confidence))
                     boxes.append([left, top, width, height])
-        print('Class Ids: ',classIds)
         # Perform non maximum suppression to eliminate redundant overlapping boxes with
         # lower confidences.
         indices = cv.dnn.NMSBoxes(boxes, confidences, CONFIDENCE_THRESH, NMS_THRESH)
@@ -439,13 +449,13 @@ class ConeDetector:
             self.drawPred(image, classIds[i], confidences[i], left, top, left + width, top + height)
         return oBoxes, oClasses
 
-    def getOutputsNames(self, net):
+    def getOutputsNames(self):
         # Get the names of all the layers in the network
-        layersNames = net.getLayerNames()
+        layersNames = self.net.getLayerNames()
         # Get the names of the output layers, i.e. the layers with unconnected outputs
-        check = net.getUnconnectedOutLayers().tolist()
+        check = self.net.getUnconnectedOutLayers().tolist()
         # If error switch line
-        return [layersNames[i[0] - 1] for i in check]     
+        return [layersNames[i - 1] for i in check]     
             
 def mainLoop():
     cone_detector = ConeDetector()
