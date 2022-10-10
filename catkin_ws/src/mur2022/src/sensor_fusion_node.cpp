@@ -46,6 +46,8 @@ class SensorFusionNode {
     std::vector<float> cones_y;
     std::vector<std::string> cone_colours;
 
+    bool system_go;
+
     bool verbose;
     bool rviz;
     std::vector<visualization_msgs::Marker> cones_viz_array;
@@ -121,34 +123,37 @@ void SensorFusionNode::startSystem(const std_msgs::Bool& msg) {
     if(this->verbose) {
       std::cout << "Published the initial orange cones." << std::endl;
     }
+    this->system_go = true;
   }
 }
 
 void SensorFusionNode::foundCones(const mur2022::found_cone_msg& msg) {
-  if(msg.point.point.x > LOOK_AHEAD_DIST) {
-    if(this->verbose) {
-      std::cout << "Cone found is too far ahead." << std::endl;
+  if(this->system_go){
+    if(msg.point.point.x > LOOK_AHEAD_DIST) {
+      if(this->verbose) {
+        std::cout << "Cone found is too far ahead." << std::endl;
+      }
+      return;
     }
-    return;
-  }
-  
-  geometry_msgs::Point global_point = getConeGlobalPosition(msg.point);
-	
-  if(needToAdd(global_point.x, global_point.y, msg.colour)) {		
-		cones_x.push_back(global_point.x);
-		cones_y.push_back(global_point.y);
-		
-    cone_colours.push_back(msg.colour);
+    
+    geometry_msgs::Point global_point = getConeGlobalPosition(msg.point);
+    
+    if(needToAdd(global_point.x, global_point.y, msg.colour)) {		
+      cones_x.push_back(global_point.x);
+      cones_y.push_back(global_point.y);
+      
+      cone_colours.push_back(msg.colour);
 
-		publishCones();
-    if(rviz) {
-      publishConesToRviz(global_point.x, global_point.y, msg.colour);
+      publishCones();
+      if(rviz) {
+        publishConesToRviz(global_point.x, global_point.y, msg.colour);
+      }
+    } else {
+      if(this->verbose) {
+        std::cout << "Cone found at: (" << global_point.x << ", " << global_point.y << ") too close to another cone." << std::endl;
+      }		
     }
-	} else {
-    if(this->verbose) {
-      std::cout << "Cone found at: (" << global_point.x << ", " << global_point.y << ") too close to another cone." << std::endl;
-    }		
-	}
+  }
 }
 
 geometry_msgs::Point SensorFusionNode::getConeGlobalPosition(geometry_msgs::PointStamped local_point) {
