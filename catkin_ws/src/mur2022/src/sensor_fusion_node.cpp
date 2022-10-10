@@ -19,31 +19,53 @@
 
 #define CONES_DIST_THRESHOLD 1.5
 
+class SensorFusionNode {
+  public:
+    ros::NodeHandle nh_;
+    ros::NodeHandle globalNode;
+
+    ros::Publisher full_cones_pub;
+    ros::Publisher full_cones_rviz_pub;
+    ros::Subscriber cones_found_sub;
+
+    tf::TransformListener* listener;
+
+    std::vector<float> cones_x;
+    std::vector<float> cones_y;
+    std::vector<std::string> colour;
+
+    bool rviz;
+    std::vector<visualization_msgs::Marker> cones_viz_array;
+
+    // Checks if the new cone has already been found
+    bool needToAdd(float x, float y);
+
+    // Uses current pose and measured position to get the global cone location
+    geometry_msgs::Point getConeGlobalPosition(geometry_msgs::PointStamped local_point);
+
+    // Publish vectors of cones
+    void publishCones(void);
+    void publishConesToRviz(float x, float y, std::string colour);
+    void addMarkerToArray(float x, float y, std::string colour);
+  
+    // Callback for new cones found location;
+    void foundCones(const mur2022::found_cone_msg& msg);
+
+    SensorFusionNode(ros::NodeHandle nh, bool use_rviz) {
+      this->rviz = use_rviz;
+
+      this->full_cones_pub = nh.advertise<mur_common::cone_msg>(CONES_FULL_TOPIC, 1, false);
+      this->full_cones_rviz_pub = nh.advertise<visualization_msgs::MarkerArray>(CONES_RVIZ_TOPIC, 1, false);
+
+      this->cones_found_sub = nh.subscribe(CONE_DETECTED_TOPIC, 1, &SensorFusionNode::foundCones, this);
+
+      this->listener = new tf::TransformListener();
+    }
+};
+
+
 // Declare "member" variables
-ros::Publisher full_cones_pub;
-ros::Publisher full_cones_rviz_pub;
-ros::Subscriber cones_found_sub;
 
-std::vector<float> cones_x;
-std::vector<float> cones_y;
-std::vector<std::string> colour;
-
-bool rviz;
-std::vector<visualization_msgs::Marker> cones_viz_array;
-
-// Checks if the new cone has already been found
-static bool needToAdd(float x, float y);
-
-// Uses current pose and measured position to get the global cone location
-static geometry_msgs::Point getConeGlobalPosition(geometry_msgs::PointStamped local_point);
-
-// Publish vectors of cones
-static void publishCones(void);
-static void publishConesToRviz(float x, float y, std::string colour);
-static void addMarkerToArray(float x, float y, std::string colour);
-
-// Callback for new cones found location;
-void foundCones(const mur2022::found_cone_msg& msg);
 
 int main(int argc, char* argv[]) {
   // Initialise the node
@@ -51,25 +73,22 @@ int main(int argc, char* argv[]) {
   
   ros::NodeHandle nh;
 
-  rviz = nh.param("use_rviz", true);
+  bool use_rviz = nh.param("use_rviz", true);
 
-  if(rviz) {
+  if(use_rviz) {
     std::cout << "Running with rviz" << std::endl;
   } else {
     std::cout << "Running without rviz" << std::endl;
   } 
 
-  full_cones_pub = nh.advertise<mur_common::cone_msg>(CONES_FULL_TOPIC, 1, false);
-  full_cones_rviz_pub = nh.advertise<visualization_msgs::MarkerArray>(CONES_RVIZ_TOPIC, 1, false);
-
-  cones_found_sub = nh.subscribe(CONE_DETECTED_TOPIC, 1, foundCones);
+  SensorFusionNode sensorFN = SensorFusionNode(nh, use_rviz);
 
   ros::spin();
   
   return 0;
 }
 
-void foundCones(const mur2022::found_cone_msg& msg) {
+void SensorFusionNode::foundCones(const mur2022::found_cone_msg& msg) {
   geometry_msgs::PointStamped point = msg.point;
   std::cout << point;
   geometry_msgs::Point global_point = getConeGlobalPosition(point);
@@ -89,17 +108,16 @@ void foundCones(const mur2022::found_cone_msg& msg) {
 	}
 }
 
-static geometry_msgs::Point getConeGlobalPosition(geometry_msgs::PointStamped local_point) {
+geometry_msgs::Point SensorFusionNode::getConeGlobalPosition(geometry_msgs::PointStamped local_point) {
   
   geometry_msgs::PointStamped global_point;
-  static tf::TransformListener tf_listener;
   
-  tf_listener.transformPoint("/map", local_point, global_point);
+  listener->transformPoint("/map", local_point, global_point);
 
   return global_point.point;
 }
 
-static bool needToAdd(float x, float y) {
+bool SensorFusionNode::needToAdd(float x, float y) {
   for(int i = 0; i < cones_x.size(); i++) {
     float dist = sqrt(pow(x - cones_x[i], 2) + pow(y - cones_y[i], 2));
     if (dist < CONES_DIST_THRESHOLD) {
@@ -109,7 +127,7 @@ static bool needToAdd(float x, float y) {
   return true;
 }
 
-static void publishCones(void) {  
+void SensorFusionNode::publishCones(void) {  
   ros::Time current_time = ros::Time::now();
   
   mur_common::cone_msg cones;
@@ -123,7 +141,7 @@ static void publishCones(void) {
   full_cones_pub.publish(cones);
 }
 
-static void addMarkerToArray(float x, float y, std::string colour) {
+void SensorFusionNode::addMarkerToArray(float x, float y, std::string colour) {
   int index = cones_x.size() - 1;
   std::cout << "Index: " << index << std::endl;
 
@@ -174,7 +192,7 @@ static void addMarkerToArray(float x, float y, std::string colour) {
   cones_viz_array.push_back(marker);
 }
 
-static void publishConesToRviz(float x, float y, std::string colour) {
+void SensorFusionNode::publishConesToRviz(float x, float y, std::string colour) {
   
   addMarkerToArray(x, y, colour);  
 
