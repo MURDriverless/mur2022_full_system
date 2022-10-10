@@ -71,6 +71,7 @@ int main(int argc, char* argv[]) {
 
 void foundCones(const mur2022::found_cone_msg& msg) {
   geometry_msgs::PointStamped point = msg.point;
+  std::cout << msg.point;
   geometry_msgs::Point global_point = getConeGlobalPosition(point);
 	
   if(needToAdd(global_point.x, global_point.y)) {		
