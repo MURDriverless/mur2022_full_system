@@ -19,8 +19,8 @@
 #include "mur_common/cone_msg.h" 
 #include "mur2022/found_cone_msg.h"
 
-#define CONES_DIST_THRESHOLD 1.0f
-#define LOOK_AHEAD_DIST 8.5f
+#define CONES_DIST_THRESHOLD 1.5f
+#define LOOK_AHEAD_DIST 6.5f
 
 #define ORANGE_START_X 0.0f
 #define ORANGE_START_LEFT 1.5f
