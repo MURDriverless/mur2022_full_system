@@ -18,7 +18,7 @@
 #include "mur2022/found_cone_msg.h"
 
 #define CONES_DIST_THRESHOLD 1.0
-#define LOOK_AHEAD_DIST 8.5
+#define LOOK_AHEAD_DIST 5.0
 
 class SensorFusionNode {
   public:
