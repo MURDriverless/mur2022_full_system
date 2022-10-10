@@ -44,14 +44,14 @@ class SensorFusionNode {
 
     std::vector<float> cones_x;
     std::vector<float> cones_y;
-    std::vector<std::string> colour;
+    std::vector<std::string> cone_colours;
 
     bool verbose;
     bool rviz;
     std::vector<visualization_msgs::Marker> cones_viz_array;
 
     // Checks if the new cone has already been found
-    bool needToAdd(float x, float y);
+    bool needToAdd(float x, float y, std::string colour);
 
     // Uses current pose and measured position to get the global cone location
     geometry_msgs::Point getConeGlobalPosition(geometry_msgs::PointStamped local_point);
@@ -108,12 +108,12 @@ void SensorFusionNode::startSystem(const std_msgs::Bool& msg) {
   if(msg.data) {
     cones_x.push_back(ORANGE_START_X);
     cones_y.push_back(ORANGE_START_LEFT);
-    colour.push_back(ORANGE);
+    cone_colours.push_back(ORANGE);
     publishConesToRviz(ORANGE_START_X, ORANGE_START_LEFT, ORANGE);
 
     cones_x.push_back(ORANGE_START_X);
     cones_y.push_back(ORANCE_START_RIGHT);
-    colour.push_back(ORANGE);
+    cone_colours.push_back(ORANGE);
 
     publishCones();
     publishConesToRviz(ORANGE_START_X, ORANCE_START_RIGHT, ORANGE);
@@ -134,11 +134,11 @@ void SensorFusionNode::foundCones(const mur2022::found_cone_msg& msg) {
   
   geometry_msgs::Point global_point = getConeGlobalPosition(msg.point);
 	
-  if(needToAdd(global_point.x, global_point.y)) {		
+  if(needToAdd(global_point.x, global_point.y, msg.colour)) {		
 		cones_x.push_back(global_point.x);
 		cones_y.push_back(global_point.y);
 		
-    colour.push_back(msg.colour);
+    cone_colours.push_back(msg.colour);
 
 		publishCones();
     if(rviz) {
@@ -160,11 +160,13 @@ geometry_msgs::Point SensorFusionNode::getConeGlobalPosition(geometry_msgs::Poin
   return global_point.point;
 }
 
-bool SensorFusionNode::needToAdd(float x, float y) {
+bool SensorFusionNode::needToAdd(float x, float y, std::string colour) {
   for(int i = 0; i < cones_x.size(); i++) {
     float dist = sqrt(pow(x - cones_x[i], 2) + pow(y - cones_y[i], 2));
     if (dist < CONES_DIST_THRESHOLD) {
-      return false;
+      if(colour.compare(cone_colours[i])) {
+        return false;
+      }      
     }
   }
   return true;
@@ -179,7 +181,7 @@ void SensorFusionNode::publishCones(void) {
 
   cones.x = cones_x;
   cones.y = cones_y;
-  cones.colour = colour;
+  cones.colour = cone_colours;
 
   full_cones_pub.publish(cones);
 }
