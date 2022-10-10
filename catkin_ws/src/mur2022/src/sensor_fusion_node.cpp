@@ -89,9 +89,8 @@ int main(int argc, char* argv[]) {
 }
 
 void SensorFusionNode::foundCones(const mur2022::found_cone_msg& msg) {
-  geometry_msgs::PointStamped point = msg.point;
-  std::cout << point;
-  geometry_msgs::Point global_point = getConeGlobalPosition(point);
+  
+  geometry_msgs::Point global_point = getConeGlobalPosition(msg.point);
 	
   if(needToAdd(global_point.x, global_point.y)) {		
 		cones_x.push_back(global_point.x);
@@ -111,7 +110,7 @@ void SensorFusionNode::foundCones(const mur2022::found_cone_msg& msg) {
 geometry_msgs::Point SensorFusionNode::getConeGlobalPosition(geometry_msgs::PointStamped local_point) {
   
   geometry_msgs::PointStamped global_point;
-  
+  listener->waitForTransform("/map", local_point.header.frame_id, local_point.header.stamp, ros::Duration(0.2));
   listener->transformPoint("/map", local_point, global_point);
 
   return global_point.point;

@@ -112,8 +112,8 @@ class ConeDetector:
             img = self.cv_bridge.imgmsg_to_cv2(msg, "bgr8")
 
             self.current_right = img
-
-            print('Got right image')
+            if self.verbose:
+                print('Got right image')
 
             self.have_right = True
     
@@ -122,8 +122,8 @@ class ConeDetector:
             img = self.cv_bridge.imgmsg_to_cv2(msg, "bgr8")
 
             self.current_left = img
-
-            print('Got left image')
+            if self.verbose:
+                print('Got left image')
 
             self.have_left = True
 
@@ -146,9 +146,11 @@ class ConeDetector:
         self.detected_cones += 1
 
     def detectCones(self):
-        print('Checking if images saved...')
+        if self.verbose:
+            print('Checking if images saved...')
         if self.have_left and self.have_right:
-            print('Have them, running algorithm')
+            if self.verbose:
+                print('Have them, running algorithm')
             found_cones = self.runAlgorithm(self.verbose)
             print('No. Cones Found: ', len(found_cones))
 
@@ -158,7 +160,8 @@ class ConeDetector:
             self.have_left = False
             self.have_right = False
         else:
-            print('No Images, skipping')
+            if self.verbose:
+                print('No Images, skipping')
 
     def runAlgorithm(self, verbose=True):
         # if (self.current_left == None) or (self.current_right == None):
