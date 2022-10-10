@@ -49,9 +49,9 @@ int main(int argc, char* argv[]) {
   // Initialise the node
   ros::init(argc, argv, "sensor_fusion_node");
   
-  ros::NodeHandle nh("~");
+  ros::NodeHandle nh;
 
-  rviz = nh.param("use_rviz", false);
+  rviz = nh.param("use_rviz", true);
 
   if(rviz) {
     std::cout << "Running with rviz" << std::endl;
@@ -92,8 +92,8 @@ void foundCones(const mur2022::found_cone_msg& msg) {
 static geometry_msgs::Point getConeGlobalPosition(geometry_msgs::PointStamped local_point) {
   
   geometry_msgs::PointStamped global_point;
-
-  tf::TransformListener tf_listener;
+  static tf::TransformListener tf_listener;
+  
   tf_listener.transformPoint("/map", local_point, global_point);
 
   return global_point.point;
