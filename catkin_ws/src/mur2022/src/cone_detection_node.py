@@ -341,6 +341,9 @@ class ConeDetector:
             x = (xL + xR)/2
             y = (yL + yR)/2
             
+            if not self.valid_cone(x, y):
+                continue
+
             if classL[i] == classR[i]:
                 color = self.classes[classL[i]]
             else:
@@ -369,6 +372,22 @@ class ConeDetector:
         y = -0.04364 -1.71*u -0.006886*v + 0.06176*u**2 + 0.7675*u*v -0.01835*v**2 + 0.0171*u**3 -0.04484*v*(u**2) -0.1662*u*(v**2) + 0.007698*v**3
         x = 4.835 -0.292*u -2.424*v -0.05401*u**2 + 0.1824*u*v + 1.043*v**2 + 0.007452*u**3 + 0.03166*v*(u**2) -0.04845*u*(v**2)  -0.201*v**3
         return x, y
+
+    def valid_cone(self, x, y):
+        if x < 1.5:
+            print("x < 1.5")
+            return False
+        if x < 3 and abs(y) > 1.5:
+            print("x < 3 and abs(y) > 1.5")
+            return False
+        if x < 4 and abs(y) > 2.5:
+            print("x < 4 and abs(y) > 2.5")
+            return False
+        if abs(y) > 3.5:
+            print("abs(y) > 3.5")
+            return False
+        return True
+
 
     def drawPred(self, image, classId, conf, left, top, right, bottom):
         # Draw a bounding box.
