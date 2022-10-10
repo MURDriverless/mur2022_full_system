@@ -69,7 +69,7 @@ class SensorFusionNode {
       this->rviz = use_rviz;
       this->verbose = use_verbose;
 
-      this->full_cones_pub = nh.advertise<mur_common::cone_msg>(CONES_FULL_TOPIC, 1, false);
+      this->full_cones_pub = nh.advertise<mur_common::cone_msg>(CONES_FULL_TOPIC, 10, false);
       this->full_cones_rviz_pub = nh.advertise<visualization_msgs::MarkerArray>(CONES_RVIZ_TOPIC, 1, false);
 
       this->cones_found_sub = nh.subscribe(CONE_DETECTED_TOPIC, 10, &SensorFusionNode::foundCones, this);
