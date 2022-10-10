@@ -108,7 +108,7 @@ class ConeDetector:
 
     def rightInput(self, msg):
         if not self.have_right:
-            img = self.cv_bridge.imgmsg_to_cv2(msg, cv.COLOR_BGR2RGB)
+            img = self.cv_bridge.imgmsg_to_cv2(msg)
 
             self.current_right = img
 
