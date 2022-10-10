@@ -29,6 +29,7 @@ std::vector<float> cones_y;
 std::vector<std::string> colour;
 
 bool rviz;
+std::vector<visualization_msgs::Marker> cones_viz_array;
 
 // Checks if the new cone has already been found
 static bool needToAdd(float x, float y);
@@ -38,7 +39,8 @@ static geometry_msgs::Point getConeGlobalPosition(geometry_msgs::PointStamped lo
 
 // Publish vectors of cones
 static void publishCones(void);
-static void publishConeToRviz(int x, int y, std::string colour);
+static void publishConesToRviz(float x, float y, std::string colour);
+static void addMarkerToArray(float x, float y, std::string colour);
 
 // Callback for new cones found location;
 void foundCones(const mur2022::found_cone_msg& msg);
@@ -51,13 +53,19 @@ int main(int argc, char* argv[]) {
 
   rviz = nh.param("use_rviz", false);
 
+  if(rviz) {
+    std::cout << "Running with rviz" << std::endl;
+  } else {
+    std::cout << "Running without rviz" << std::endl;
+  } 
+
   full_cones_pub = nh.advertise<mur_common::cone_msg>(CONES_FULL_TOPIC, 1, false);
   full_cones_rviz_pub = nh.advertise<visualization_msgs::MarkerArray>(CONES_RVIZ_TOPIC, 1, false);
 
   cones_found_sub = nh.subscribe(CONE_DETECTED_TOPIC, 1, foundCones);
 
   ros::spin();
-
+  
   return 0;
 }
 
@@ -74,10 +82,10 @@ void foundCones(const mur2022::found_cone_msg& msg) {
 
 		publishCones();
     if(rviz) {
-      publishConeToRviz(global_point.x, global_point.y, msg.colour);
+      publishConesToRviz(global_point.x, global_point.y, msg.colour);
     }
 	} else {
-		std::cout << "Cone found at: (" << global_point.x << ", " << global_point.y << ") too close to another cone.";
+		std::cout << "Cone found at: (" << global_point.x << ", " << global_point.y << ") too close to another cone." << std::endl;
 	}
 }
 
@@ -115,11 +123,15 @@ static void publishCones(void) {
   full_cones_pub.publish(cones);
 }
 
-static void publishConeToRviz(int x, int y, std::string colour) {
+static void addMarkerToArray(float x, float y, std::string colour) {
+  int index = cones_x.size() - 1;
+  std::cout << "Index: " << index << std::endl;
+
   visualization_msgs::Marker marker;
 
   marker.header.frame_id = "/map";
   marker.header.stamp = ros::Time::now();
+  marker.id = index;
 
   marker.type = visualization_msgs::Marker::CYLINDER;
   marker.action = visualization_msgs::Marker::ADD;
@@ -137,17 +149,17 @@ static void publishConeToRviz(int x, int y, std::string colour) {
   marker.scale.y = 0.25;
   marker.scale.z = 0.5;
 
-  if(colour.compare("blue")) {
+  if(colour.compare("blue") == 0) {
     marker.color.a = 1.0; // Don't forget to set the alpha!
     marker.color.r = 0.0;
     marker.color.g = 0.0;
     marker.color.b = 1.0;
-  } else if(colour.compare("yellow")) {
+  } else if(colour.compare("yellow") == 0) {
     marker.color.a = 1.0; // Don't forget to set the alpha!
     marker.color.r = 1.0;
     marker.color.g = 1.0;
     marker.color.b = 0.0;
-  } else if(colour.compare("orange")) {
+  } else if(colour.compare("orange") == 0) {
     marker.color.a = 1.0; // Don't forget to set the alpha!
     marker.color.r = 1.0;
     marker.color.g = 0.65;
@@ -159,5 +171,15 @@ static void publishConeToRviz(int x, int y, std::string colour) {
     marker.color.b = 1.0;
   }
 
-  full_cones_rviz_pub.publish(marker);
+  cones_viz_array.push_back(marker);
+}
+
+static void publishConesToRviz(float x, float y, std::string colour) {
+  
+  addMarkerToArray(x, y, colour);  
+
+  visualization_msgs::MarkerArray markerArray;
+  markerArray.markers = cones_viz_array;
+
+  full_cones_rviz_pub.publish(markerArray);
 }
