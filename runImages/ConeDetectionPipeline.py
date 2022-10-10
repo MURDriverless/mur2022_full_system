@@ -42,7 +42,7 @@ def getOutputsNames(net):
     check = net.getUnconnectedOutLayers().tolist()
     # If error switch line
     # return [layersNames[i - 1] for i in check]
-    return [layersNames[i[0] - 1] for i in check]
+    return [layersNames[i - 1] for i in check]
 
 # Draw the predicted bounding box
 def drawPred(image, classId, conf, left, top, right, bottom):
@@ -96,7 +96,7 @@ def postprocess(image, outs):
     oClasses = []
     for i in indices:
         # If error uncomment below
-        i = i[0]
+        # i = i[0]
         box = boxes[i]
         oBoxes.append(box)
         oClasses.append(classIds[i])
@@ -144,6 +144,7 @@ for img_id in range(1, 30):
 
     # Create a 4D blob from a frame.
     blobR = cv.dnn.blobFromImage(right_image, 1/255, (inpWidth, inpHeight), [0,0,0], 1, crop=False)
+    print(blobR)
     # Sets the input to the network
     net.setInput(blobR)
 
