@@ -374,8 +374,8 @@ class ConeDetector:
         return x, y
 
     def valid_cone(self, x, y):
-        if x < 2:
-            print("x < 2")
+        if x < 1.5:
+            print("x < 1.5")
             return False
         if x < 3 and abs(y) > 1.5:
             print("x < 3 and abs(y) > 1.5")
