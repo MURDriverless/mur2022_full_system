@@ -18,6 +18,7 @@
 #include "mur2022/found_cone_msg.h"
 
 #define CONES_DIST_THRESHOLD 1.5
+#define LOOK_AHEAD_DIST 5.0
 
 class SensorFusionNode {
   public:
@@ -74,6 +75,7 @@ int main(int argc, char* argv[]) {
   ros::NodeHandle nh;
 
   bool use_rviz = nh.param("use_rviz", true);
+  bool use_verbose = nh.param("verbose", true);
 
   if(use_rviz) {
     std::cout << "Running with rviz" << std::endl;
@@ -89,6 +91,13 @@ int main(int argc, char* argv[]) {
 }
 
 void SensorFusionNode::foundCones(const mur2022::found_cone_msg& msg) {
+  if(msg.point.x > LOOK_AHEAD_DIST) {
+    if(this.verbose) {
+      std::cout << "Cone found is too far ahead." << std::endl;
+    }
+    return;
+  }
+  
   
   geometry_msgs::Point global_point = getConeGlobalPosition(msg.point);
 	
@@ -103,7 +112,9 @@ void SensorFusionNode::foundCones(const mur2022::found_cone_msg& msg) {
       publishConesToRviz(global_point.x, global_point.y, msg.colour);
     }
 	} else {
-		std::cout << "Cone found at: (" << global_point.x << ", " << global_point.y << ") too close to another cone." << std::endl;
+    if(this.verbose) {
+      std::cout << "Cone found at: (" << global_point.x << ", " << global_point.y << ") too close to another cone." << std::endl;
+    }		
 	}
 }
 
