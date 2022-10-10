@@ -118,7 +118,8 @@ for img_id in range(1, 30):
 
     h,  w = left_image.shape[:2]
 
-
+    # cv.imshow("Blue only", left_image[:,:,0])
+    # cv.waitKey(0)
     # cv.imshow("right", right_image)
     # cv.waitKey(1000)
     # cv.imshow("left", left_image)

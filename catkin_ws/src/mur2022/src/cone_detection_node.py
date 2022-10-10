@@ -21,9 +21,9 @@ DETECTED_CONE_TOPIC = "/stereo_cones"
 
 CONE_DETECTION_FRAME = "/husky"
 
-CLASS_FILE = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/cones.names"
-MODEL_CONFIG = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones.cfg"
-MODEL_WEIGHTS = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones_best.weights"
+CLASS_FILE = "catkin_ws/src/mur2022/src/cones.names"
+MODEL_CONFIG = "catkin_ws/src/mur2022/src/yolov4-tiny-cones.cfg"
+MODEL_WEIGHTS = "catkin_ws/src/mur2022/src/yolov4-tiny-cones_best.weights"
 
 GPU = cv.cuda.getCudaEnabledDeviceCount()
 
@@ -108,7 +108,7 @@ class ConeDetector:
 
     def rightInput(self, msg):
         if not self.have_right:
-            img = self.cv_bridge.imgmsg_to_cv2(msg, cv.COLOR_BGR2RGB)
+            img = self.cv_bridge.imgmsg_to_cv2(msg)
 
             self.current_right = img
 
