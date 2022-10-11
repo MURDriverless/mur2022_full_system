@@ -1,0 +1,5 @@
+<launch> 
+   <include file="$(find ouster_ros)/launch/mur_sensor.launch"/>
+   <include file="$(find pylon_camera)/launch/pylon_camera_both.launch"/>
+   
+</launch>

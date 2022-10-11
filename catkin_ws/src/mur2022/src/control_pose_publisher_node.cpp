@@ -116,6 +116,8 @@ bool system_go = false;
 void systemGoCheck(const std_msgs::Bool& msg) {
   std::cout << "system_go saved" << std::endl;
   system_go = true;
+  last_time = ros::Time::now();
+  this_time = ros::Time::now();
 }
 
 int main(int argc, char** argv){
@@ -123,7 +125,6 @@ int main(int argc, char** argv){
 
   ros::NodeHandle nh;
 
-  last_time = ros::Time::now();
   this_time = ros::Time::now();
 
   // last_pose.orientation.w = 0; 
@@ -147,23 +148,20 @@ int main(int argc, char** argv){
   system_start_sub = nh.subscribe(SYSTEM_START_TOPIC, 1, systemGoCheck);
 
   tf::TransformListener listener;
-  ros::Rate rate(20.0);
+  ros::Rate rate(10.0);
   while (nh.ok()){
     ros::spinOnce();
     if(system_go) {
       std::cout << "Running code" << std::endl;
       this_time = ros::Time::now();
-  
-      double time_diff = this_time.toSec() - last_time.toSec();
       
-      listener.waitForTransform(GLOBAL_FRAME, HUSKY_FRAME, this_time, ros::Duration(0.1));
-      listener.waitForTransform(HUSKY_FRAME,LEGO_LOAM_CAMERA_FRAME, this_time, ros::Duration(0.1));
-
       tf::StampedTransform transform;
+      listener.waitForTransform(HUSKY_FRAME, GLOBAL_FRAME, ros::Time::now(), ros::Duration(1.0));
       listener.lookupTransform(HUSKY_FRAME, GLOBAL_FRAME, this_time, transform);
 
       geometry_msgs::Twist velocity;
-      listener.lookupTwist(HUSKY_FRAME, GLOBAL_FRAME, this_time,this_time - last_time, velocity);
+      listener.waitForTransform(HUSKY_FRAME, GLOBAL_FRAME, ros::Time::now(), ros::Duration(1.0));
+      listener.lookupTwist(HUSKY_FRAME, GLOBAL_FRAME, this_time,ros::Duration(0.3), velocity);
 
       tf::Vector3 position = transform.getOrigin();
       tf::Quaternion orientation = transform.getRotation();

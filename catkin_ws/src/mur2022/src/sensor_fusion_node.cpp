@@ -47,6 +47,7 @@ class SensorFusionNode {
     std::vector<std::string> cone_colours;
 
     bool system_go;
+    bool have_enough = false;
 
     bool verbose;
     bool rviz;
@@ -117,7 +118,7 @@ void SensorFusionNode::startSystem(const std_msgs::Bool& msg) {
     cones_y.push_back(ORANCE_START_RIGHT);
     cone_colours.push_back(ORANGE);
 
-    publishCones();
+    // publishCones();
     publishConesToRviz(ORANGE_START_X, ORANCE_START_RIGHT, ORANGE);
 
     if(this->verbose) {
@@ -143,10 +144,15 @@ void SensorFusionNode::foundCones(const mur2022::found_cone_msg& msg) {
       cones_y.push_back(global_point.y);
       
       cone_colours.push_back(msg.colour);
+      if (!have_enough && cones_x.size() > 3) {
+        have_enough = true;
+      }
 
-      publishCones();
-      if(rviz) {
-        publishConesToRviz(global_point.x, global_point.y, msg.colour);
+      if (have_enough) {
+        publishCones();
+        if(rviz) {
+          publishConesToRviz(global_point.x, global_point.y, msg.colour);
+        }
       }
     } else {
       if(this->verbose) {

@@ -1,0 +1,5 @@
+<launch>
+    <include file="$(find launch_files)/launch/DataCollection.launch"/>
+    <include file="$(find mur2022)/launch/ROSBAG_Perception.launch"/>
+    <include file="$(find launch_files)/launch/ControlPipeline.launch"/>
+</launch>
