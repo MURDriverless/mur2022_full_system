@@ -3,5 +3,6 @@
 
 #define GLOBAL_FRAME "/map"
 #define HUSKY_FRAME "/husky"
+#define LEGO_LOAM_CAMERA_FRAME "/camera"
 
 #endif
