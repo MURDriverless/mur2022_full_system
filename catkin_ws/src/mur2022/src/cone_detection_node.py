@@ -373,18 +373,18 @@ class ConeDetector:
         return x, y
 
     def valid_cone(self, x, y):
-        if x < 1.5:
-            print("x < 1.5")
+        if x < 0:
+            print("x < 0")
             return False
-        if x < 3 and abs(y) > 1.5:
-            print("x < 3 and abs(y) > 1.5")
-            return False
-        if x < 4 and abs(y) > 2.5:
-            print("x < 4 and abs(y) > 2.5")
-            return False
-        if abs(y) > 3.5:
-            print("abs(y) > 3.5")
-            return False
+        # if x < 3 and abs(y) > 1.5:
+        #     print("x < 3 and abs(y) > 1.5")
+        #     return False
+        # if x < 4 and abs(y) > 2.5:
+        #     print("x < 4 and abs(y) > 2.5")
+        #     return False
+        # if abs(y) > 3.5:
+        #     print("abs(y) > 3.5")
+        #     return False
         return True
 
 

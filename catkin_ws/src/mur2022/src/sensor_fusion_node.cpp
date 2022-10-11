@@ -20,7 +20,7 @@
 #include "mur2022/found_cone_msg.h"
 
 #define CONES_DIST_THRESHOLD 1.0f
-#define LOOK_AHEAD_DIST 3.5f
+#define LOOK_AHEAD_DIST 5.0f
 
 #define ORANGE_START_X 0.0f
 #define ORANGE_START_LEFT 1.5f
