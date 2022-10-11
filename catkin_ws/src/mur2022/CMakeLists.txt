@@ -66,7 +66,6 @@ find_package(Eigen3 REQUIRED)
 ## Generate messages in the 'msg' folder
 add_message_files(
   FILES
-  place_holder_msg.msg
   found_cone_msg.msg
 )
 
@@ -165,18 +164,9 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/mur2022_node.cpp)
-
-add_executable(place_holder_node                    src/place_holder_node.cpp)
-add_executable(both_image_aquisition_node           src/both_image_aquisition_node.cpp)        
-add_executable(cone_location_node                   src/cone_location_node.cpp)
-add_executable(follower_node                        src/follower_node)
-add_executable(husky_control_node                   src/husky_control_node.cpp)
-add_executable(husky_mpcc_node                      src/husky_mpcc_node.cpp)
-add_executable(lego_loam_node                       src/lego_loam_node.cpp)
-add_executable(lidar_reader_node                    src/lidar_reader_node.cpp)
-add_executable(mur_stereo_ros_node                  src/mur_stereo_ros_node.cpp)
-add_executable(output_transformation_node           src/output_transformation_node.cpp)
-add_executable(planner_node                         src/planner_node.cpp)
+      
+add_executable(sensor_fusion_node                   src/sensor_fusion_node.cpp)
+add_executable(control_safety_node                  src/control_safety_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -188,34 +178,16 @@ add_executable(planner_node                         src/planner_node.cpp)
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-add_dependencies(place_holder_node                  mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
-add_dependencies(both_image_aquisition_node         mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
-add_dependencies(cone_location_node                 mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
-add_dependencies(follower_node                      mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
-add_dependencies(husky_control_node                 mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
-add_dependencies(husky_mpcc_node                    mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})     
-add_dependencies(lego_loam_node                     mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})     
-add_dependencies(lidar_reader_node                  mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})   
-add_dependencies(mur_stereo_ros_node                mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
-add_dependencies(output_transformation_node         mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
-add_dependencies(planner_node                       mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+add_dependencies(sensor_fusion_node                 mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+add_dependencies(control_safety_node                mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
 
-target_link_libraries(place_holder_node                   ${catkin_LIBRARIES})
-target_link_libraries(both_image_aquisition_node          ${catkin_LIBRARIES})
-target_link_libraries(cone_location_node                  ${catkin_LIBRARIES})
-target_link_libraries(follower_node                       ${catkin_LIBRARIES})
-target_link_libraries(husky_control_node                  ${catkin_LIBRARIES})
-target_link_libraries(husky_mpcc_node                     ${catkin_LIBRARIES})
-target_link_libraries(lego_loam_node                      ${catkin_LIBRARIES})       
-target_link_libraries(lidar_reader_node                   ${catkin_LIBRARIES})
-target_link_libraries(mur_stereo_ros_node                 ${catkin_LIBRARIES})
-target_link_libraries(output_transformation_node          ${catkin_LIBRARIES})
-target_link_libraries(planner_node                        ${catkin_LIBRARIES})
+target_link_libraries(sensor_fusion_node            ${catkin_LIBRARIES})
+target_link_libraries(control_safety_node           ${catkin_LIBRARIES})
 
 
 #############

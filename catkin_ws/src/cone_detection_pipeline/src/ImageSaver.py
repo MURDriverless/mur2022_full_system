@@ -4,7 +4,6 @@ import rospy
 
 from sensor_msgs.msg import Image
 
-import numpy as np
 import cv2 as cv
 from cv_bridge import CvBridge
 

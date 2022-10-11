@@ -1,0 +1,16 @@
+<launch>
+	<node
+		pkg    = "mur2022"
+		name   = "cone_detection"
+		output = "screen"
+		type   = "cone_detection_node.py"
+		>
+	</node>	
+	<node
+		pkg    = "mur2022"
+		name   = "sensor_fusion"
+		output = "screen"
+		type   = "sensor_fusion_node"
+		>
+	</node>
+</launch>

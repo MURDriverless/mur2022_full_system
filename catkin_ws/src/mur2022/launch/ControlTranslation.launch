@@ -1,9 +1,9 @@
 <launch>	
 	<node
 		pkg    = "mur2022"
-		name   = "output_transform"
+		name   = "control_safety"
 		output = "screen"
-		type   = "output_transformation_node"
+		type   = "control_safety_node"
 		>
 	</node>
 </launch>

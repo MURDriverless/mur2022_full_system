@@ -41,8 +41,8 @@ def getOutputsNames(net):
     # Get the names of the output layers, i.e. the layers with unconnected outputs
     check = net.getUnconnectedOutLayers().tolist()
     # If error switch line
+    # return [layersNames[i - 1] for i in check]
     return [layersNames[i - 1] for i in check]
-    # return [layersNames[i[0] - 1] for i in check]
 
 # Draw the predicted bounding box
 def drawPred(image, classId, conf, left, top, right, bottom):
@@ -118,7 +118,8 @@ for img_id in range(1, 30):
 
     h,  w = left_image.shape[:2]
 
-
+    # cv.imshow("Blue only", left_image[:,:,0])
+    # cv.waitKey(0)
     # cv.imshow("right", right_image)
     # cv.waitKey(1000)
     # cv.imshow("left", left_image)
@@ -143,6 +144,7 @@ for img_id in range(1, 30):
 
     # Create a 4D blob from a frame.
     blobR = cv.dnn.blobFromImage(right_image, 1/255, (inpWidth, inpHeight), [0,0,0], 1, crop=False)
+    print(blobR)
     # Sets the input to the network
     net.setInput(blobR)
 
