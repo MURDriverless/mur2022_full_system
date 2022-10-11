@@ -1,14 +1,14 @@
 digraph G {
-"wld_ori" -> "basler"[label="Broadcaster: /basler_to_wld_ori\nAverage rate: 9.788 Hz\nMost recent transform: 1663744593.668 ( -0.069 sec old)\nBuffer length: 4.904 sec\n"];
-"husky" -> "wld_ori"[label="Broadcaster: /wld_ori_to_husky\nAverage rate: 9.804 Hz\nMost recent transform: 1663744593.638 ( -0.039 sec old)\nBuffer length: 4.794 sec\n"];
-"map" -> "camera_init"[label="Broadcaster: /camera_init_to_map\nAverage rate: 9.790 Hz\nMost recent transform: 1663744593.689 ( -0.089 sec old)\nBuffer length: 4.903 sec\n"];
-"camera" -> "base_link"[label="Broadcaster: /base_link_to_camera\nAverage rate: 9.824 Hz\nMost recent transform: 1663744593.689 ( -0.089 sec old)\nBuffer length: 4.886 sec\n"];
-"camera_init" -> "camera"[label="Broadcaster: /lego_loam_bor\nAverage rate: 10.277 Hz\nMost recent transform: 1663744593.492 ( 0.107 sec old)\nBuffer length: 4.768 sec\n"];
-"camera_init" -> "aft_mapped"[label="Broadcaster: /lego_loam_bor\nAverage rate: 2.174 Hz\nMost recent transform: 1663744593.313 ( 0.286 sec old)\nBuffer length: 4.600 sec\n"];
-"camera_init" -> "laser_odom"[label="Broadcaster: /lego_loam_bor\nAverage rate: 10.208 Hz\nMost recent transform: 544.980 ( 1663744048.619 sec old)\nBuffer length: 4.800 sec\n"];
-"base_link" -> "husky"[label="Broadcaster: /husky_to_base_link\nAverage rate: 9.762 Hz\nMost recent transform: 1663744593.658 ( -0.059 sec old)\nBuffer length: 4.814 sec\n"];
+"camera_init" -> "laser_odom"[label="Broadcaster: /lego_loam_bor\nAverage rate: 10.209 Hz\nMost recent transform: 1553.956 ( 1665450343.572 sec old)\nBuffer length: 4.800 sec\n"];
+"map" -> "camera_init"[label="Broadcaster: /camera_init_to_map\nAverage rate: 9.441 Hz\nMost recent transform: 1665451897.577 ( -0.050 sec old)\nBuffer length: 4.766 sec\n"];
+"camera_init" -> "camera"[label="Broadcaster: /lego_loam_bor\nAverage rate: 10.124 Hz\nMost recent transform: 1665451897.488 ( 0.040 sec old)\nBuffer length: 4.840 sec\n"];
+"camera" -> "base_link"[label="Broadcaster: /base_link_to_camera\nAverage rate: 9.441 Hz\nMost recent transform: 1665451897.577 ( -0.050 sec old)\nBuffer length: 4.766 sec\n"];
+"base_link" -> "husky"[label="Broadcaster: /husky_to_base_link\nAverage rate: 9.441 Hz\nMost recent transform: 1665451897.577 ( -0.050 sec old)\nBuffer length: 4.766 sec\n"];
+"husky" -> "wld_ori"[label="Broadcaster: /wld_ori_to_husky\nAverage rate: 9.441 Hz\nMost recent transform: 1665451897.577 ( -0.050 sec old)\nBuffer length: 4.766 sec\n"];
+"wld_ori" -> "basler"[label="Broadcaster: /basler_to_wld_ori\nAverage rate: 9.421 Hz\nMost recent transform: 1665451897.577 ( -0.050 sec old)\nBuffer length: 4.777 sec\n"];
+"camera_init" -> "aft_mapped"[label="Broadcaster: /lego_loam_bor\nAverage rate: 2.233 Hz\nMost recent transform: 1665451897.488 ( 0.040 sec old)\nBuffer length: 4.479 sec\n"];
 edge [style=invis];
  subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
-"Recorded at time: 1663744593.599"[ shape=plaintext ] ;
+"Recorded at time: 1665451897.528"[ shape=plaintext ] ;
  }->"map";
 }
