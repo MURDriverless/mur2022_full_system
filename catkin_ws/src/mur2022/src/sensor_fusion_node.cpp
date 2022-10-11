@@ -19,8 +19,8 @@
 #include "mur_common/cone_msg.h" 
 #include "mur2022/found_cone_msg.h"
 
-#define CONES_DIST_THRESHOLD 1.5f
-#define LOOK_AHEAD_DIST 6.5f
+#define CONES_DIST_THRESHOLD 1.0f
+#define LOOK_AHEAD_DIST 3.5f
 
 #define ORANGE_START_X 0.0f
 #define ORANGE_START_LEFT 1.5f
@@ -164,9 +164,9 @@ bool SensorFusionNode::needToAdd(float x, float y, std::string colour) {
   for(int i = 0; i < cones_x.size(); i++) {
     float dist = sqrt(pow(x - cones_x[i], 2) + pow(y - cones_y[i], 2));
     if (dist < CONES_DIST_THRESHOLD) {
-      if(colour.compare(cone_colours[i])) {
-        return false;
-      }      
+      // if(colour.compare(cone_colours[i])== 0) {
+      return false;
+      // }      
     }
   }
   return true;
