@@ -16,7 +16,7 @@ ros::Subscriber system_start_sub;
 ros::Time last_time;
 ros::Time this_time;
 
-bool system_go;
+bool system_go = false;
 
 void systemGoCheck(std_msgs::Bool& msg) {
   system_go = msg.data;
@@ -31,13 +31,14 @@ int main(int argc, char** argv){
   this_time = ros::Time::now();
   
   control_odom_pub = nh.advertise<nav_msgs::Odometry>(CONTROL_ODOM_TOPIC, 1);
-  system_start_sub = nh.subscribe(SYSTEM_START_TOPIC, 1, &systemGoCheck);
+  system_start_sub = nh.subscribe(SYSTEM_START_TOPIC, 1, systemGoCheck);
 
   tf::TransformListener listener;
-
   ros::Rate rate(20.0);
   while (nh.ok()){
+    ros::spinOnce();
     if(system_go) {
+      std::cout << "Running code" << std::endl;
       this_time = ros::Time::now();
   
       double time_diff = this_time.toSec() - last_time.toSec();
@@ -67,9 +68,10 @@ int main(int argc, char** argv){
       out_msg.twist.twist = velocity;
 
       control_odom_pub.publish(out_msg);
-
+      std::cout << "Pose published" << std::endl;
       rate.sleep();
     }
   }
+  std::cout << "Exit Loop!" << std::endl;
   return 0;
 };
