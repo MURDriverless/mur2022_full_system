@@ -1,4 +1,4 @@
-#include <ros/ros.h>
+#include "ros/ros.h"
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/PointStamped.h>
@@ -19,7 +19,9 @@ ros::Time this_time;
 bool system_go = true;
 
 void systemGoCheck(const std_msgs::Bool& msg) {
-  system_go = msg.data;
+  if (msg.data) {
+    system_go = true;
+  }
 }
 
 int main(int argc, char** argv){
@@ -70,4 +72,4 @@ int main(int argc, char** argv){
   }
   std::cout << "Exit Loop!" << std::endl;
   return 0;
-};
+}
