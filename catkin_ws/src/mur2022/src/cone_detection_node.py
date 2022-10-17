@@ -21,9 +21,9 @@ DETECTED_CONE_TOPIC = "/stereo_cones"
 
 CONE_DETECTION_FRAME = "/husky"
 
-CLASS_FILE = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/cones.names"
-MODEL_CONFIG = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones.cfg"
-MODEL_WEIGHTS = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones_best.weights"
+CLASS_FILE = "/home/micah/Documents/mur2022_full_system/catkin_ws/src/mur2022/src/cones.names"
+MODEL_CONFIG = "/home/micah/Documents/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones.cfg"
+MODEL_WEIGHTS = "/home/micah/Documents/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones_best.weights"
 
 GPU = cv.cuda.getCudaEnabledDeviceCount()
 
@@ -454,8 +454,8 @@ class ConeDetector:
         # Get the names of the output layers, i.e. the layers with unconnected outputs
         check = self.net.getUnconnectedOutLayers().tolist()
         # If error switch line
-        # return [layersNames[i - 1] for i in check] 
-        return [layersNames[i[0] - 1] for i in check]     
+        return [layersNames[i - 1] for i in check] 
+        # return [layersNames[i[0] - 1] for i in check]     
             
 def mainLoop():
     cone_detector = ConeDetector()
