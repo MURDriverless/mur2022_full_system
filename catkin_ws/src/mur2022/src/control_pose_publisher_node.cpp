@@ -16,7 +16,7 @@ ros::Subscriber system_start_sub;
 ros::Time last_time;
 ros::Time this_time;
 
-bool system_go = false;
+bool system_go = true;
 
 void systemGoCheck(const std_msgs::Bool& msg) {
   if (msg.data) {
@@ -43,11 +43,11 @@ int main(int argc, char** argv){
       this_time = ros::Time::now();
       
       tf::StampedTransform transform;
-      listener.waitForTransform(HUSKY_FRAME, GLOBAL_FRAME, ros::Time::now(), ros::Duration(1.0));
+      listener.waitForTransform(HUSKY_FRAME, GLOBAL_FRAME, ros::Time::now(), ros::Duration(10.0));
       listener.lookupTransform(HUSKY_FRAME, GLOBAL_FRAME, this_time, transform);
 
       geometry_msgs::Twist velocity;
-      listener.waitForTransform(HUSKY_FRAME, GLOBAL_FRAME, ros::Time::now(), ros::Duration(1.0));
+      listener.waitForTransform(HUSKY_FRAME, GLOBAL_FRAME, ros::Time::now(), ros::Duration(10.0));
       listener.lookupTwist(HUSKY_FRAME, GLOBAL_FRAME, this_time,ros::Duration(0.3), velocity);
 
       tf::Vector3 position = transform.getOrigin();

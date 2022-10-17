@@ -167,7 +167,8 @@ include_directories(
       
 add_executable(sensor_fusion_node                   src/sensor_fusion_node.cpp)
 add_executable(control_safety_node                  src/control_safety_node.cpp)
-add_executable(control_pose_publisher_node          src/control_pose_publisher_node.cpp)   
+add_executable(control_pose_publisher_node          src/control_pose_publisher_node.cpp)
+add_executable(sensor_fusion_node_all_cones          src/sensor_fusion_node_all_cones.cpp)    
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -182,6 +183,7 @@ add_executable(control_pose_publisher_node          src/control_pose_publisher_n
 add_dependencies(sensor_fusion_node                 mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 add_dependencies(control_safety_node                mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 add_dependencies(control_pose_publisher_node                mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+add_dependencies(sensor_fusion_node_all_cones      mur2022_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
@@ -191,6 +193,7 @@ add_dependencies(control_pose_publisher_node                mur2022_generate_mes
 target_link_libraries(sensor_fusion_node            ${catkin_LIBRARIES})
 target_link_libraries(control_safety_node           ${catkin_LIBRARIES})
 target_link_libraries(control_pose_publisher_node           ${catkin_LIBRARIES})
+target_link_libraries(sensor_fusion_node_all_cones           ${catkin_LIBRARIES})
 
 
 #############
