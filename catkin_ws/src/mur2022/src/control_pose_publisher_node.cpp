@@ -71,7 +71,7 @@ int main(int argc, char** argv){
       listener.lookupTransform(GLOBAL_FRAME, HUSKY_FRAME, this_time, transform);
 
       geometry_msgs::Twist velocity;
-      listener.waitForTransform(HUSKY_FRAME, GLOBAL_FRAME, ros::Time::now(), ros::Duration(1.0));
+      listener.waitForTransform(HUSKY_FRAME, GLOBAL_FRAME, ros::Time::now(), ros::Duration(10.0));
       listener.lookupTwist(HUSKY_FRAME, GLOBAL_FRAME, this_time,ros::Duration(0.3), velocity);
 
       tf::Vector3 position = transform.getOrigin();
