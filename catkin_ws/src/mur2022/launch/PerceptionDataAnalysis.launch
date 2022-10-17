@@ -20,4 +20,11 @@
 		type   = "control_pose_publisher_node"
 		>
 	</node>
+	<node
+		pkg    = "mur2022"
+		name   = "csv_saver"
+		output = "screen"
+		type   = "csv_saver.py"
+		>
+	</node>	
 </launch>

@@ -16,7 +16,7 @@ ros::Subscriber system_start_sub;
 ros::Time last_time;
 ros::Time this_time;
 
-bool system_go = true;
+bool system_go = false;
 
 void systemGoCheck(const std_msgs::Bool& msg) {
   if (msg.data) {

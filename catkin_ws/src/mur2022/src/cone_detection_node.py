@@ -437,7 +437,7 @@ class ConeDetector:
         oClasses = []
         for i in indices:
             # If error uncomment below
-            i = i[0]
+            # i = i[0]
             box = boxes[i]
             oBoxes.append(box)
             oClasses.append(classIds[i])
