@@ -20,7 +20,6 @@ ros::Time this_time;
 
 bool system_go = false;
 
-
 void systemGoCheck(const std_msgs::Bool& msg) {
   if (msg.data && !system_go) {
     system_go = true;
