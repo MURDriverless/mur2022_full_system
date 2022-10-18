@@ -3,9 +3,9 @@
 import rospy
 from nav_msgs.msg import Odometry
 from mur_common.msg import cone_msg
-from tf.transformations import euler_from_quaternion, quaternion_from_euler
+from tf.transformations import euler_from_quaternion
 
-EXPERIMENT = "StraightASpeedrun1"
+EXPERIMENT = "Turning"
 
 POSE_TOPIC = "/control_odom"
 POSE_SAVE = "/home/micah/Documents/mur2022_full_system/ExperimentResults/" + EXPERIMENT + "pose.csv"

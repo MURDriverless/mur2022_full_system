@@ -33,9 +33,7 @@ ros::Time waitForTransforms(tf::TransformListener& listener) {
   while(!transforms_good) {
     try {
       tf::StampedTransform transform;
-      std::cout << "Waiting" << std::endl;
       listener.lookupTransform(GLOBAL_FRAME, HUSKY_FRAME, ros::Time::now(),transform);
-      std::cout << "Ready!" << std::endl;
       transforms_good = true;
     } catch (tf::LookupException) {
       continue;
