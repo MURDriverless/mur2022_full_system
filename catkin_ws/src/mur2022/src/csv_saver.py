@@ -2,6 +2,7 @@
 
 import rospy
 from nav_msgs.msg import Odometry
+from tf.transformations import euler_from_quaternion, quaternion_from_euler
 
 EXPERIMENT = "StraightASpeedrun1"
 
@@ -17,7 +18,14 @@ def pose_save(data):
     v_x = data.twist.twist.linear.x
     v_y = data.twist.twist.linear.y
     v_z = data.twist.twist.linear.z
-    fP.write(str(x) + "," + str(y) + "," + str(z) + "," + "\n")
+    orientation_q = data.pose.pose.orientation
+    orientation_list = [orientation_q.x, orientation_q.y, orientation_q.z, orientation_q.w]
+    (roll, pitch, yaw) = euler_from_quaternion(orientation_list)
+    v_yaw = data.twist.twist.angular.z
+    fP.write(str(x) + "," + str(y) + "," + str(z) + "," + str(v_x) + "," + str(v_y) + "," + str(v_z) + "," + str(yaw) + "," + str(v_yaw) + "\n")
+
+def cone_save(data):
+    pass
 
 def CSVSaver():
     rospy.init_node("csv_saver")
@@ -29,7 +37,7 @@ def CSVSaver():
 
 if __name__ == '__main__':
     fP = open(POSE_SAVE, "w")
-    fP.write("x,y,z\n")
+    fP.write("x,y,z,v_x,v_y,v_z,yaw,v_yaw\n")
     fC = open(CONE_SAVE, "w")  
     try:
         CSVSaver()
