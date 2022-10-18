@@ -287,11 +287,9 @@ for img_id in range(1, 30):
                 # right_image = cv.circle(right_image,(int(xRfL),int(yRfL)),3,(0,0,0),-1)
                 xL, yL = world_from_L(centerL[l][0], centerL[l][1])
                 xR, yR = world_from_R(centerR[r][0], centerR[r][1])
+                cost = abs(xL - xR) + 2*abs(yL - yR)
                 if abs(yL - yR) > 0.7:
-                    cost = 100
-                else:
-                    # cost = np.sqrt(abs(xL - xR)**2 + abs(yL - yR)**2)
-                    cost = abs(xL - xR) + 4*abs(yL - yR)
+                    cost = cost*1000
                 all_cost[r][l] =  cost
 
 
