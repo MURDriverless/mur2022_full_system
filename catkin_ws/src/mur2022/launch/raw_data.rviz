@@ -89,7 +89,7 @@ Visualization Manager:
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
-      Size (Pixels): 1.5
+      Size (Pixels): 3
       Size (m): 0.009999999776482582
       Style: Points
       Topic: /ouster/points
@@ -125,25 +125,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 2.310783863067627
+      Distance: 6.4581756591796875
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.5629546642303467
-        Y: -0.004653140902519226
-        Z: 1.2318564586166758e-6
+        X: -0.010845065116882324
+        Y: -0.0020158723928034306
+        Z: 3.807199391303584e-7
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.19979675114154816
+      Pitch: 0.4547964632511139
       Target Frame: <Fixed Frame>
       Value: ThirdPersonFollower (rviz)
-      Yaw: 3.1453990936279297
+      Yaw: 3.0953996181488037
     Saved:
       - Class: rviz/ThirdPersonFollower
         Distance: 6.0796308517456055
