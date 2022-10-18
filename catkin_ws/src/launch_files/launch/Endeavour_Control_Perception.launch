@@ -1,0 +1,5 @@
+<launch> 
+   <include file="$(find lego_loam_bor)/launch/run_simulation.launch"/>
+   <include file="$(find mur2022)/launch/Perception.launch"/>
+   <include file="$(find husky_mpcc)/launch/slow2fast.launch"/>
+</launch>
