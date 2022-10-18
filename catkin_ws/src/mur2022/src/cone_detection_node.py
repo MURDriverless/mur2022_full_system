@@ -24,8 +24,10 @@ CONE_DETECTION_FRAME = "/husky"
 CLASS_FILE = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/cones.names"
 MODEL_CONFIG = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones.cfg"
 MODEL_WEIGHTS = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones_best.weights"
-
-GPU = cv.cuda.getCudaEnabledDeviceCount()
+try:
+    GPU = cv.cuda.getCudaEnabledDeviceCount()
+except:
+    GPU = False
 
 CONFIDENCE_THRESH = 0.75    # Confidence threshold
 NMS_THRESH = 0.75           # Non-maximum suppression threshold
