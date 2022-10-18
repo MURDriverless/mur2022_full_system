@@ -39,6 +39,7 @@ class SensorFusionNode {
     ros::Publisher full_cones_rviz_pub;
     ros::Subscriber cones_found_sub;
     ros::Subscriber start_run_sub;
+    ros::Subscriber lego_loam_on_sub;
 
     tf::TransformListener* listener;
 
@@ -46,7 +47,7 @@ class SensorFusionNode {
     std::vector<float> cones_y;
     std::vector<std::string> cone_colours;
 
-    bool system_go;
+    bool system_go = false;
     bool have_enough = false;
 
     bool verbose;
@@ -67,6 +68,7 @@ class SensorFusionNode {
     // Callback for new cones found location;
     void foundCones(const mur2022::found_cone_msg& msg);
     void startSystem(const std_msgs::Bool& msg);
+    void waitForTransforms(void);
 
     SensorFusionNode(ros::NodeHandle nh, bool use_rviz, bool use_verbose) {
       this->rviz = use_rviz;
@@ -76,8 +78,10 @@ class SensorFusionNode {
       this->full_cones_rviz_pub = nh.advertise<visualization_msgs::MarkerArray>(CONES_RVIZ_TOPIC, 1, false);
 
       this->cones_found_sub = nh.subscribe(CONE_DETECTED_TOPIC, 10, &SensorFusionNode::foundCones, this);
-      this->start_run_sub = nh.subscribe(SYSTEM_START_TOPIC, 1, &SensorFusionNode::startSystem, this); 
+      this->start_run_sub = nh.subscribe(SYSTEM_START_TOPIC, 1, &SensorFusionNode::startSystem, this);
       this->listener = new tf::TransformListener();
+
+      waitForTransforms();
     }
 };
 
@@ -107,8 +111,42 @@ int main(int argc, char* argv[]) {
   return 0;
 }
 
+void SensorFusionNode::waitForTransforms(void) {
+  bool transforms_good = false;
+
+  while(!transforms_good) {
+    try {
+      tf::StampedTransform transform;
+      this->listener->lookupTransform(GLOBAL_FRAME, HUSKY_FRAME, ros::Time::now(),transform);      
+      transforms_good = true;
+    } catch (tf::LookupException) {
+      continue;
+    } catch (tf::ConnectivityException) {
+      continue;
+    }  catch (tf::ExtrapolationException) {
+      continue;
+    }
+  }
+  cones_x.push_back(ORANGE_START_X);
+  cones_y.push_back(ORANGE_START_LEFT);
+  cone_colours.push_back(ORANGE);
+  publishConesToRviz(ORANGE_START_X, ORANGE_START_LEFT, ORANGE);
+
+  cones_x.push_back(ORANGE_START_X);
+  cones_y.push_back(ORANCE_START_RIGHT);
+  cone_colours.push_back(ORANGE);
+
+  // publishCones();
+  publishConesToRviz(ORANGE_START_X, ORANCE_START_RIGHT, ORANGE);
+
+  if(this->verbose) {
+    std::cout << "Published the initial orange cones." << std::endl;
+  }
+  this->system_go = true;
+}
+
 void SensorFusionNode::startSystem(const std_msgs::Bool& msg) {
-  if(msg.data) {
+  if(msg.data && !this->system_go) {
     cones_x.push_back(ORANGE_START_X);
     cones_y.push_back(ORANGE_START_LEFT);
     cone_colours.push_back(ORANGE);

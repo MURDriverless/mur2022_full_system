@@ -22,16 +22,28 @@ bool system_go = false;
 
 
 void systemGoCheck(const std_msgs::Bool& msg) {
-  if (msg.data) {
+  if (msg.data && !system_go) {
     system_go = true;
   }
 }
 
-void legoLoamOn(const nav_msgs::Odometry& msg) {
-  if(!system_go) {
-    system_go = true;
-    std::cout << "LeGO-LOAM has turned the perception system on" << std::endl;
+void waitForTransforms(tf::TransformListener& listener) {
+  bool transforms_good = false;
+
+  while(!transforms_good) {
+    try {
+      tf::StampedTransform transform;
+      listener.lookupTransform(GLOBAL_FRAME, HUSKY_FRAME, ros::Time::now(),transform);      
+      transforms_good = true;
+    } catch (tf::LookupException) {
+      continue;
+    } catch (tf::ConnectivityException) {
+      continue;
+    }  catch (tf::ExtrapolationException) {
+      continue;
+    }
   }
+  system_go = true;
 }
 
 int main(int argc, char** argv){
@@ -43,9 +55,10 @@ int main(int argc, char** argv){
   
   control_odom_pub = nh.advertise<nav_msgs::Odometry>(CONTROL_ODOM_TOPIC, 1);
   system_start_sub = nh.subscribe(SYSTEM_START_TOPIC, 1, systemGoCheck);
-  lego_loam_running_sub = nh.subscribe(LEGO_LOAM_POSE_TOPIC, 1, legoLoamOn);
 
   tf::TransformListener listener;
+  waitForTransforms(listener);
+
   ros::Rate rate(10.0);
   while (nh.ok()){
     ros::spinOnce();

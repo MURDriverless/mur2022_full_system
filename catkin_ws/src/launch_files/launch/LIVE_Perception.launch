@@ -1,4 +1,4 @@
 <launch> 
-   <include file="$(find lego_loam_bor)/launch/run_simu_time.launch"/>
+   <include file="$(find lego_loam_bor)/launch/run_realtime.launch"/>
    <include file="$(find mur2022)/launch/Perception.launch"/>
 </launch>
