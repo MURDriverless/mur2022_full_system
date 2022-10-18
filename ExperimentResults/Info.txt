@@ -1,0 +1,8 @@
+Moving tests:
+ASpeed 21.05s 21.15s 21.05s ave: 21.08s speed: 0.379m/s
+ASlow 46.6 speed: 0.1717m/s
+XSpeed 8.65s 8.5s 8.76s ave: 8.637s speed: 0.926m/s
+
+Turning:
+speed set: 0.5m/s forward
+Radius: 3m
