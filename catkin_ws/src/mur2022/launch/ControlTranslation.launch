@@ -6,4 +6,11 @@
 		type   = "control_safety_node"
 		>
 	</node>
+	<node
+		pkg    = "mur2022"
+		name   = "control_pose_publisher"
+		output = "screen"
+		type   = "control_pose_publisher_node"
+		>
+	</node>
 </launch>

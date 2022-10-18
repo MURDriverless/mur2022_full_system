@@ -12,15 +12,25 @@
 // ros::Subscriber lego_loam_odom_sub;
 ros::Publisher control_odom_pub;
 ros::Subscriber system_start_sub;
+ros::Subscriber lego_loam_running_sub;
+
 
 ros::Time last_time;
 ros::Time this_time;
 
 bool system_go = false;
 
+
 void systemGoCheck(const std_msgs::Bool& msg) {
   if (msg.data) {
     system_go = true;
+  }
+}
+
+void legoLoamOn(const nav_msgs::Odometry& msg) {
+  if(!system_go) {
+    system_go = true;
+    std::cout << "LeGO-LOAM has turned the perception system on" << std::endl;
   }
 }
 
@@ -33,6 +43,7 @@ int main(int argc, char** argv){
   
   control_odom_pub = nh.advertise<nav_msgs::Odometry>(CONTROL_ODOM_TOPIC, 1);
   system_start_sub = nh.subscribe(SYSTEM_START_TOPIC, 1, systemGoCheck);
+  lego_loam_running_sub = nh.subscribe(LEGO_LOAM_POSE_TOPIC, 1, legoLoamOn);
 
   tf::TransformListener listener;
   ros::Rate rate(10.0);
