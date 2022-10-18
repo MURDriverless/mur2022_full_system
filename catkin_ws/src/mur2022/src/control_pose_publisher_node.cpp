@@ -17,6 +17,7 @@ ros::Subscriber lego_loam_running_sub;
 
 ros::Time last_time;
 ros::Time this_time;
+ros::Time good_time;
 
 bool system_go = false;
 
@@ -26,13 +27,15 @@ void systemGoCheck(const std_msgs::Bool& msg) {
   }
 }
 
-void waitForTransforms(tf::TransformListener& listener) {
+ros::Time waitForTransforms(tf::TransformListener& listener) {
   bool transforms_good = false;
 
   while(!transforms_good) {
     try {
       tf::StampedTransform transform;
-      listener.lookupTransform(GLOBAL_FRAME, HUSKY_FRAME, ros::Time::now(),transform);      
+      std::cout << "Waiting" << std::endl;
+      listener.lookupTransform(GLOBAL_FRAME, HUSKY_FRAME, ros::Time::now(),transform);
+      std::cout << "Ready!" << std::endl;
       transforms_good = true;
     } catch (tf::LookupException) {
       continue;
@@ -43,6 +46,7 @@ void waitForTransforms(tf::TransformListener& listener) {
     }
   }
   system_go = true;
+  return ros::Time::now();
 }
 
 int main(int argc, char** argv){
@@ -56,7 +60,7 @@ int main(int argc, char** argv){
   system_start_sub = nh.subscribe(SYSTEM_START_TOPIC, 1, systemGoCheck);
 
   tf::TransformListener listener;
-  waitForTransforms(listener);
+  good_time = waitForTransforms(listener);
 
   ros::Rate rate(10.0);
   while (nh.ok()){
@@ -64,14 +68,21 @@ int main(int argc, char** argv){
     if(system_go) {
       std::cout << "Running code" << std::endl;
       this_time = ros::Time::now();
+      if (this_time < good_time) {
+        continue;
+      }
       
       tf::StampedTransform transform;
-      listener.waitForTransform(HUSKY_FRAME, GLOBAL_FRAME, ros::Time::now(), ros::Duration(1.0));
-      listener.lookupTransform(GLOBAL_FRAME, HUSKY_FRAME, this_time, transform);
-
       geometry_msgs::Twist velocity;
-      listener.waitForTransform(HUSKY_FRAME, GLOBAL_FRAME, ros::Time::now(), ros::Duration(10.0));
-      listener.lookupTwist(HUSKY_FRAME, GLOBAL_FRAME, this_time,ros::Duration(0.3), velocity);
+      try {
+        listener.waitForTransform(HUSKY_FRAME, GLOBAL_FRAME, ros::Time::now(), ros::Duration(1.0));
+        listener.lookupTransform(GLOBAL_FRAME, HUSKY_FRAME, this_time, transform);
+
+        listener.waitForTransform(HUSKY_FRAME, GLOBAL_FRAME, ros::Time::now(), ros::Duration(1.0));
+        listener.lookupTwist(HUSKY_FRAME, GLOBAL_FRAME, this_time,ros::Duration(0.3), velocity);
+      } catch (tf::ExtrapolationException) {
+        continue;
+      }
 
       tf::Vector3 position = transform.getOrigin();
       tf::Quaternion orientation = transform.getRotation();

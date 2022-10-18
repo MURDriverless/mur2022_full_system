@@ -21,9 +21,12 @@ DETECTED_CONE_TOPIC = "/stereo_cones"
 
 CONE_DETECTION_FRAME = "/husky"
 
-CLASS_FILE = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/cones.names"
-MODEL_CONFIG = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones.cfg"
-MODEL_WEIGHTS = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones_best.weights"
+# CLASS_FILE = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/cones.names"
+# MODEL_CONFIG = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones.cfg"
+# MODEL_WEIGHTS = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones_best.weights"
+CLASS_FILE = "/home/micah/Documents/mur2022_full_system/catkin_ws/src/mur2022/src/cones.names"
+MODEL_CONFIG = "/home/micah/Documents/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones.cfg"
+MODEL_WEIGHTS = "/home/micah/Documents/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones_best.weights"
 try:
     GPU = cv.cuda.getCudaEnabledDeviceCount()
 except:
