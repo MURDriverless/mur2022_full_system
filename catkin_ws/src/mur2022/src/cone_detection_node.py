@@ -443,7 +443,7 @@ class ConeDetector:
         oClasses = []
         for i in indices:
             # If error uncomment below
-            i = i[0]
+            # i = i[0]
             box = boxes[i]
             oBoxes.append(box)
             oClasses.append(classIds[i])
@@ -460,8 +460,8 @@ class ConeDetector:
         # Get the names of the output layers, i.e. the layers with unconnected outputs
         check = self.net.getUnconnectedOutLayers().tolist()
         # If error switch line
-        # return [layersNames[i - 1] for i in check] 
-        return [layersNames[i[0] - 1] for i in check]     
+        return [layersNames[i - 1] for i in check] 
+        # return [layersNames[i[0] - 1] for i in check]     
             
 def mainLoop():
     cone_detector = ConeDetector()

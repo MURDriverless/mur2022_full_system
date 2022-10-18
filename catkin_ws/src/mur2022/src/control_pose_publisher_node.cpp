@@ -67,13 +67,17 @@ int main(int argc, char** argv){
       this_time = ros::Time::now();
       
       tf::StampedTransform transform;
-      listener.waitForTransform(HUSKY_FRAME, GLOBAL_FRAME, ros::Time::now(), ros::Duration(1.0));
-      listener.lookupTransform(GLOBAL_FRAME, HUSKY_FRAME, this_time, transform);
-
       geometry_msgs::Twist velocity;
-      listener.waitForTransform(HUSKY_FRAME, GLOBAL_FRAME, ros::Time::now(), ros::Duration(1.0));
-      listener.lookupTwist(HUSKY_FRAME, GLOBAL_FRAME, this_time,ros::Duration(0.3), velocity);
 
+      try {
+        listener.waitForTransform(HUSKY_FRAME, GLOBAL_FRAME, ros::Time::now(), ros::Duration(1.0));
+        listener.lookupTransform(GLOBAL_FRAME, HUSKY_FRAME, this_time, transform);
+
+        listener.waitForTransform(HUSKY_FRAME, GLOBAL_FRAME, ros::Time::now(), ros::Duration(1.0));
+        listener.lookupTwist(HUSKY_FRAME, GLOBAL_FRAME, this_time,ros::Duration(0.3), velocity);
+      } catch (tf::ExtrapolationException) {
+        continue;
+      }
       tf::Vector3 position = transform.getOrigin();
       tf::Quaternion orientation = transform.getRotation();
 
