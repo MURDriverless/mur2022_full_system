@@ -32,6 +32,7 @@ int main(int argc, char* argv[]) {
 	// Initialise a subscriber
 	safety_sub = nh.subscribe("/safe", 1, updateSafety);
 	control_output_sub = nh.subscribe("/mur2022internal/cmd_vel", 1, sendControlOutputs);
+	// control_output_pub = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 10);
 	control_output_pub = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 10);
 
 	// Spin as a single-threaded node

@@ -1,0 +1,32 @@
+digraph G {
+"base_link" -> "base_footprint"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 266.895 sec old)\nBuffer length: 0.000 sec\n"];
+"camera" -> "base_link"[label="Broadcaster: /base_link_to_camera\nAverage rate: 10000.000 Hz\nMost recent transform: 1663744484.265 ( -1663744217.370 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "front_bumper_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 266.895 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "imu_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 266.895 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "inertial_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 266.895 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "rear_bumper_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 266.895 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "top_chassis_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 266.895 sec old)\nBuffer length: 0.000 sec\n"];
+"top_plate_link" -> "top_plate_front_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 266.895 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "top_plate_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 266.895 sec old)\nBuffer length: 0.000 sec\n"];
+"top_plate_link" -> "top_plate_rear_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 266.895 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "user_rail_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 266.895 sec old)\nBuffer length: 0.000 sec\n"];
+"camera_init" -> "laser_odom"[label="Broadcaster: /lego_loam_bor\nAverage rate: 11.673 Hz\nMost recent transform: 436.288 ( -169.393 sec old)\nBuffer length: 0.600 sec\n"];
+"map" -> "camera_init"[label="Broadcaster: /camera_init_to_map\nAverage rate: 10000.000 Hz\nMost recent transform: 1663744484.265 ( -1663744217.370 sec old)\nBuffer length: 0.000 sec\n"];
+"camera_init" -> "camera"[label="Broadcaster: /lego_loam_bor\nAverage rate: 11.236 Hz\nMost recent transform: 266.890 ( 0.005 sec old)\nBuffer length: 0.623 sec\n"];
+"base_link" -> "front_left_wheel_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 51.613 Hz\nMost recent transform: 266.876 ( 0.019 sec old)\nBuffer length: 0.620 sec\n"];
+"base_link" -> "front_right_wheel_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 51.613 Hz\nMost recent transform: 266.876 ( 0.019 sec old)\nBuffer length: 0.620 sec\n"];
+"base_link" -> "rear_left_wheel_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 51.613 Hz\nMost recent transform: 266.876 ( 0.019 sec old)\nBuffer length: 0.620 sec\n"];
+"base_link" -> "rear_right_wheel_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 51.613 Hz\nMost recent transform: 266.876 ( 0.019 sec old)\nBuffer length: 0.620 sec\n"];
+"wld_ori" -> "basler"[label="Broadcaster: /basler_to_wld_ori\nAverage rate: 10000.000 Hz\nMost recent transform: 1663744484.265 ( -1663744217.370 sec old)\nBuffer length: 0.000 sec\n"];
+"husky" -> "wld_ori"[label="Broadcaster: /wld_ori_to_husky\nAverage rate: 10000.000 Hz\nMost recent transform: 1663744484.265 ( -1663744217.370 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "husky"[label="Broadcaster: /husky_to_base_link\nAverage rate: 11.647 Hz\nMost recent transform: 266.957 ( -0.062 sec old)\nBuffer length: 0.601 sec\n"];
+"camera_init" -> "aft_mapped"[label="Broadcaster: /lego_loam_bor\nAverage rate: 3.643 Hz\nMost recent transform: 266.827 ( 0.068 sec old)\nBuffer length: 0.549 sec\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 266.895"[ shape=plaintext ] ;
+ }->"odom";
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 266.895"[ shape=plaintext ] ;
+ }->"map";
+}
