@@ -32,7 +32,9 @@ PR = np.array([[ 1.33753465e+03, -1.11813249e+02,  9.27124358e+02,  8.68619259e+
  [ 2.39852651e-02, -1.17556250e-01,  9.92776528e-01,  3.40744625e-01]])
 
 
-
+RESIZE = 2
+PAUSEFIRSTX = 10
+LINE = True
 
 # Get the names of the output layers
 def getOutputsNames(net):
@@ -41,8 +43,8 @@ def getOutputsNames(net):
     # Get the names of the output layers, i.e. the layers with unconnected outputs
     check = net.getUnconnectedOutLayers().tolist()
     # If error switch line
-    return [layersNames[i[0] - 1] for i in check]
     # return [layersNames[i - 1] for i in check]
+    return [layersNames[i - 1] for i in check]
 
 # Draw the predicted bounding box
 def drawPred(image, classId, conf, left, top, right, bottom):
@@ -96,7 +98,7 @@ def postprocess(image, outs):
     oClasses = []
     for i in indices:
         # If error uncomment below
-        i = i[0]
+        # i = i[0]
         box = boxes[i]
         oBoxes.append(box)
         oClasses.append(classIds[i])
@@ -318,6 +320,9 @@ for img_id in range(1, 30):
     classR = np.array(classR)
     classR = classR[sortR]
     print(classR)
+
+    image = np.concatenate((left_image, right_image), axis=1)
+    
     for pointL, pointR, cl, pair in zip(centerL, centerR, classR, pairs):
         xL, yL = pointL
         xR, yR = pointR
@@ -330,17 +335,23 @@ for img_id in range(1, 30):
             color = (0, rn, rn)
         else:
             color = (0, 0, 0)
-        right_image = cv.circle(right_image,(int(xR),int(yR)),5,color,-1)
-        cv.putText(right_image,str(pair[0]) + "," + str(pair[1]), (int(xR),int(yR)), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255))
-        left_image = cv.circle(left_image,(int(xL),int(yL)),5,color,-1)
-        cv.putText(left_image,str(pair[0]) + "," + str(pair[1]), (int(xL),int(yL)), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255))
+        image = cv.circle(image,(w + int(xR),int(yR)),5,color,-1)
+        cv.putText(image,str(pair[0]) + "," + str(pair[1]), (w + int(xR),int(yR)), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255))
+        image = cv.circle(image,(int(xL),int(yL)),5,color,-1)
+        cv.putText(image,str(pair[0]) + "," + str(pair[1]), (int(xL),int(yL)), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255))
+        if LINE:
+            image = cv.line(image, (int(xL), int(yL)), (w + int(xR), int(yR)), color, RESIZE)
 
-    left_image = cv.resize(left_image, (int(w/2),int(h/2)))
-    cv.imshow("Left Image w/ matches", left_image)
-    cv.waitKey(2000)
-    right_image = cv.resize(right_image, (int(w/2),int(h/2)))
-    cv.imshow("Right Image w/ matches", right_image)
-    cv.waitKey(2000)
+
+    h,  w = image.shape[:2]
+
+    image = cv.resize(image, (int(w/RESIZE), int(h/RESIZE)))
+    
+    cv.imshow("Both", image)
+    if img_id <= PAUSEFIRSTX:
+        cv.waitKey(0)
+    else:
+        cv.waitKey(500)
         
     # TODO: Once Matches have been found compute cone locations
     # triangulate points

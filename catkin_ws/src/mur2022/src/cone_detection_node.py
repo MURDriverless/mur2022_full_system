@@ -21,11 +21,16 @@ DETECTED_CONE_TOPIC = "/stereo_cones"
 
 CONE_DETECTION_FRAME = "/husky"
 
-CLASS_FILE = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/cones.names"
-MODEL_CONFIG = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones.cfg"
-MODEL_WEIGHTS = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones_best.weights"
-
-GPU = cv.cuda.getCudaEnabledDeviceCount()
+# CLASS_FILE = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/cones.names"
+# MODEL_CONFIG = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones.cfg"
+# MODEL_WEIGHTS = "/media/mur/XavierSSD/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones_best.weights"
+CLASS_FILE = "/home/micah/Documents/mur2022_full_system/catkin_ws/src/mur2022/src/cones.names"
+MODEL_CONFIG = "/home/micah/Documents/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones.cfg"
+MODEL_WEIGHTS = "/home/micah/Documents/mur2022_full_system/catkin_ws/src/mur2022/src/yolov4-tiny-cones_best.weights"
+try:
+    GPU = cv.cuda.getCudaEnabledDeviceCount()
+except:
+    GPU = False
 
 CONFIDENCE_THRESH = 0.75    # Confidence threshold
 NMS_THRESH = 0.75           # Non-maximum suppression threshold
@@ -271,11 +276,9 @@ class ConeDetector:
                 if classR[r] == classL[l]:
                     xL, yL = self.world_from_L(centerL[l][0], centerL[l][1])
                     xR, yR = self.world_from_R(centerR[r][0], centerR[r][1])
+                    cost = abs(xL - xR) + 2*abs(yL - yR)
                     if abs(yL - yR) > 0.7:
-                        cost = 100
-                    else:
-                        cost = abs(xL - xR) + 4*abs(yL - yR)
-                    
+                        cost = cost*1000
                     all_cost[r][l] =  cost
 
         if(verbose):
@@ -437,7 +440,7 @@ class ConeDetector:
         oClasses = []
         for i in indices:
             # If error uncomment below
-            i = i[0]
+            # i = i[0]
             box = boxes[i]
             oBoxes.append(box)
             oClasses.append(classIds[i])
@@ -454,8 +457,8 @@ class ConeDetector:
         # Get the names of the output layers, i.e. the layers with unconnected outputs
         check = self.net.getUnconnectedOutLayers().tolist()
         # If error switch line
-        # return [layersNames[i - 1] for i in check] 
-        return [layersNames[i[0] - 1] for i in check]     
+        return [layersNames[i - 1] for i in check] 
+        # return [layersNames[i[0] - 1] for i in check]     
             
 def mainLoop():
     cone_detector = ConeDetector()
