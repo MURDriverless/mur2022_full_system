@@ -142,6 +142,20 @@ for img_id in range(1, 30):
 
     net = cv.dnn.readNetFromDarknet(modelConfiguration, modelWeights)
 
+    try:
+        GPU = cv.cuda.getCudaEnabledDeviceCount()
+    except:
+        GPU = False
+    
+    if(not GPU):
+        net.setPreferableBackend(cv.dnn.DNN_BACKEND_OPENCV)
+        net.setPreferableTarget(cv.dnn.DNN_TARGET_CPU)
+        print('Using CPU device.')
+    else:
+        net.setPreferableBackend(cv.dnn.DNN_BACKEND_CUDA)
+        net.setPreferableTarget(cv.dnn.DNN_TARGET_CUDA)
+        print('Using GPU device.')
+
     # Create a 4D blob from a frame.
     blobR = cv.dnn.blobFromImage(right_image, 1/255, (inpWidth, inpHeight), [0,0,0], 1, crop=False)
     print(blobR)
